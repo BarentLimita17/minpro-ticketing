@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -10,12 +7,104 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Sample {
-  id        Int      @id @default(autoincrement())
-  name      String
-  code      String   @unique
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+model Event {
+  id                 Int       @id @default(autoincrement())
+  name               String    @db.VarChar(255)
+  date               DateTime  @db.Date
+  startTime          DateTime  @db.Time()
+  endTime            DateTime  @db.Time()
+  description        String    @db.LongText()
+  termsAndConditions String    @db.LongText()
+  isFree             Boolean   @default(false)
+  isPublished        Boolean   @default(false)
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+  deletedAt          DateTime?
+  locationId         Int
+  categoryId         Int?
+  userUid            String?
 
-  @@map("samples") // if you want to use snake_case format
+  eventTicket EventTicket[]
+  review      Review[]
+  location    Location      @relation(fields: [locationId], references: [id])
+  Category    Category?     @relation(fields: [categoryId], references: [id])
+  User        User?         @relation(fields: [userUid], references: [uid])
+}
+
+model EventTicket {
+  id           Int       @id @default(autoincrement())
+  name         String    @db.VarChar(45)
+  description  String    @db.VarChar(255)
+  price        Int       @default(0)
+  quantity     Int
+  validityDate DateTime? @db.Date
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  deletedAt    DateTime?
+  eventId      Int
+
+  event Event @relation(fields: [eventId], references: [id])
+}
+
+model Category {
+  id        Int       @id @default(autoincrement())
+  name      String    @db.VarChar(45)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  event Event[]
+}
+
+model Review {
+  id         Int       @id @default(autoincrement())
+  rating     Int
+  feedback   String    @db.VarChar(255)
+  suggestion String    @db.VarChar(255)
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  deletedAt  DateTime?
+  eventId    Int
+  userUid    String?
+
+  Event Event @relation(fields: [eventId], references: [id])
+  User  User? @relation(fields: [userUid], references: [uid])
+}
+
+model Location {
+  id        Int       @id @default(autoincrement())
+  name      String    @db.VarChar(255)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  event Event[]
+}
+
+model User {
+  uid           String    @id @default(cuid())
+  email         String
+  fullname      String
+  password      String
+  pointsBalance Int
+  code          String    @unique
+  isUseCode     Boolean   @default(false)
+  roleId        Int
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  deletedAt     DateTime?
+
+  event  Event[]
+  review Review[]
+  role   Role     @relation(fields: [roleId], references: [id])
+}
+
+model Role {
+  id        Int       @id @default(autoincrement())
+  name      String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  user User[]
 }
