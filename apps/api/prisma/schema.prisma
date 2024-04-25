@@ -48,13 +48,16 @@ model EventTicket {
 }
 
 model Promotion {
-  id        Int       @id @default(autoincrement())
-  name      String    @db.VarChar(45)
-  discount  Float
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  deletedAt DateTime?
-  eventId   Int
+  id           Int       @id @default(autoincrement())
+  name         String    @db.VarChar(45)
+  description  String    @db.VarChar(255)
+  discount     Float
+  quantity     Int
+  validityDate DateTime? @db.Date
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  deletedAt    DateTime?
+  eventId      Int
 
   Event Event @relation(fields: [eventId], references: [id])
 }
