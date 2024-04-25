@@ -1,4 +1,4 @@
-import { SampleController } from '@/controllers/Feature2Controller/sample.controller';
+import { SampleController } from '@/controllers/sample.controller';
 import { Router } from 'express';
 
 export class SampleRouter {
