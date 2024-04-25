@@ -26,6 +26,7 @@ model Event {
 
   eventTicket EventTicket[]
   review      Review[]
+  promotion   Promotion[]
   location    Location      @relation(fields: [locationId], references: [id])
   Category    Category?     @relation(fields: [categoryId], references: [id])
   User        User?         @relation(fields: [userUid], references: [uid])
@@ -44,6 +45,18 @@ model EventTicket {
   eventId      Int
 
   event Event @relation(fields: [eventId], references: [id])
+}
+
+model Promotion {
+  id        Int       @id @default(autoincrement())
+  name      String    @db.VarChar(45)
+  discount  Float
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+  eventId   Int
+
+  Event Event @relation(fields: [eventId], references: [id])
 }
 
 model Category {
