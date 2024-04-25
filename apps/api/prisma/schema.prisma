@@ -50,6 +50,7 @@ model EventTicket {
 model Promotion {
   id           Int       @id @default(autoincrement())
   name         String    @db.VarChar(45)
+  code         String    @db.VarChar(45)
   description  String    @db.VarChar(255)
   discount     Float
   quantity     Int
