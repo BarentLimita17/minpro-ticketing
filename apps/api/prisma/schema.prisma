@@ -91,6 +91,10 @@ model Review {
 model Location {
   id        Int       @id @default(autoincrement())
   name      String    @db.VarChar(255)
+  city      String    @db.VarChar(45)
+  details   String    @db.VarChar(255)
+  street    String    @db.VarChar(45)
+  zipCode   String    @db.VarChar(45)
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   deletedAt DateTime?
@@ -103,7 +107,7 @@ model User {
   email         String
   fullname      String
   password      String
-  pointsBalance Int
+  pointsBalance Int       @default(0)
   code          String    @unique
   isUseCode     Boolean   @default(false)
   roleId        Int
