@@ -14,11 +14,13 @@
   "license": "ISC",
   "dependencies": {
     "@prisma/client": "^5.13.0",
+    "@types/express-validator": "^3.0.0",
     "cors": "^2.8.5",
     "cross-env": "^7.0.3",
     "date-fns": "^3.6.0",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
+    "express-validator": "^7.0.1",
     "husky": "^9.0.11",
     "moment-timezone": "^0.5.45",
     "ts-node": "^10.9.2",
