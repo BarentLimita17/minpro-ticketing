@@ -1,3 +1,4 @@
+import flowbite from "flowbite-react/tailwind";
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
@@ -6,9 +7,13 @@ module.exports = {
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
 
     "./src/**/*.{js,ts,jsx,tsx,mdx}",
+    flowbite.content()
   ],
   theme: {
     extend: {},
   },
-  plugins: [require("daisyui")],
+  plugins: [
+    require("daisyui"),
+    require('flowbite/plugin')
+  ],
 }

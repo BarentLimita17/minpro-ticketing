@@ -7,22 +7,28 @@ import { FaCalendarPlus } from "react-icons/fa";
 export default function Navbar() {
   const pathname = usePathname();
   return (
-    <div className="flex justify-around items-center w-full h-[80px] bg-[#004997]">
+    <div className="hidden xl:flex justify-around items-center w-full h-[80px] bg-[#004997]">
       <div>
         <Link href={"/"}>
-          <Image loading="lazy" src="/konserin.png" alt="logo konserin" width={250} height={200} />
+          <Image loading="lazy" src="/konserin.png" alt="logo konserin" width={200} height={200} />
         </Link>
       </div>
       <div className="flex justify-center gap-[70px]">
-        <button className="text-white hover:text-black duration-300">
-          BERANDA
-        </button>
-        <button className="text-white hover:text-black duration-300">
-          EVENTS
-        </button>
-        <button className="text-white hover:text-black duration-300">
-          TENTANG KAMI
-        </button>
+        <Link href={"/"}>
+          <button className="text-white hover:text-black duration-300">
+            BERANDA
+          </button>
+        </Link>
+        <Link href={"/events"}>
+          <button className="text-white hover:text-black duration-300">
+            EVENTS
+          </button>
+        </Link>
+        <Link href="/about">
+          <button className="text-white hover:text-black duration-300">
+            TENTANG KAMI
+          </button>
+        </Link>
       </div>
       <div className="flex gap-[30px]">
         <button className="flex gap-2 items-center text-white hover:text-black duration-300">
