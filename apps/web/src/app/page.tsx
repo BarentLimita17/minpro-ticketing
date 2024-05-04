@@ -10,7 +10,7 @@ import { FaPlus, FaMoneyBill, FaTicketAlt, FaLongArrowAltRight } from "react-ico
 
 export default function Home() {
   return (
-    <div className='bg-[#fbfbfb] min-h-screen'>
+    <div className='bg-[#fbfbfb] min-h-screen pt-[5%]'>
       <Carousel />
       {/* DIV TEMUKAN EVENT TERDEKAT */}
       <div className="mt-[5%] mx-[100px] flex justify-between">

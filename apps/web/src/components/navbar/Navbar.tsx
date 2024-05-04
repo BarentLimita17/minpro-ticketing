@@ -1,13 +1,11 @@
 'use client';
 import Image from "next/image";
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
 import { FaCalendarPlus } from "react-icons/fa";
 
 export default function Navbar() {
-  const pathname = usePathname();
   return (
-    <div className="hidden xl:flex justify-around items-center w-full h-[80px] bg-[#004997]">
+    <div className="hidden xl:flex justify-around items-center w-full h-[80px] fixed z-50 bg-[#004997]">
       <div>
         <Link href={"/"}>
           <Image loading="lazy" src="/konserin.png" alt="logo konserin" width={200} height={200} />
