@@ -2,7 +2,7 @@
 import React from "react";
 import { FaArrowRight } from "react-icons/fa";
 import Link from "next/link";
-import Carousel from '@/components/Carousel';
+import Carousel from '@/components/Home/HomeCarousel';
 
 
 export default function Home() {
