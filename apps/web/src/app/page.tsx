@@ -4,7 +4,7 @@ import { FaArrowRight } from "react-icons/fa";
 import { IoLocationSharp, IoCalendar } from "react-icons/io5";
 import Image from "next/image";
 import Link from "next/link";
-import Carousel from '@/components/Carousel';
+import Carousel from '@/components/Home/HomeCarousel';
 import { MdPersonAddAlt1 } from "react-icons/md";
 import { FaPlus, FaMoneyBill, FaTicketAlt, FaLongArrowAltRight } from "react-icons/fa";
 
