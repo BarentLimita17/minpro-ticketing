@@ -41,7 +41,7 @@ export const BiayaContents = [
         description1: 'Komisi 0%',
         description2: 'Gratis',
         icon: <FaHandshake size={28} className="text-white" />,
-        imageBg: "[#fe3b3b]"
+        imageBg: "fe3b3b"
     },
     {
         title: 'Event Berbayar',
@@ -49,7 +49,7 @@ export const BiayaContents = [
         description1: 'Harga tiket ≥ IDR 100.000',
         description2: 'Fee 2.5% per tiket',
         icon: <FaCircleDollarToSlot size={28} className="text-white" />,
-        imageBg: "[#fecc25]"
+        imageBg: "fecc25"
     },
 ]
 

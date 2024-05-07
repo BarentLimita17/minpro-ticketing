@@ -1,10 +1,7 @@
 import React from "react";
+import { IAboutWelcomeEOCard } from "./types";
 
-export default function AboutWelcomeEOCard({ title, description, icon }: {
-    title: string,
-    description: string,
-    icon: any,
-}) {
+export default function AboutWelcomeEOCard({ title, description, icon }: IAboutWelcomeEOCard) {
     return (
         <div className="card w-96 bg-white text-primary-content shadow-2xl hover:shadow-[#d8ecff]">
             <div className="card-body">

@@ -4,6 +4,9 @@ import './globals.css';
 import Navbar from '@/components/navbar/Navbar';
 import NavbarMobile from '@/components/navbar/NavbarMobile';
 import Footer from '@/components/footer/Footer';
+import TanstackProvider from '@/providers/TanstackProvider';
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -22,9 +25,12 @@ export default function RootLayout({
       <body className={inter.className}>
         <Navbar />
         <NavbarMobile />
-        <div style={{ minHeight: '100vh' }}>
-          {children}
-        </div>
+        <ToastContainer />
+        <TanstackProvider>
+          <div style={{ minHeight: '100vh' }}>
+            {children}
+          </div>
+        </TanstackProvider>
         <Footer />
       </body>
     </html>

@@ -10,6 +10,11 @@ export const getLocationByNameQuery = async (name: string) => {
     })
 }
 
+// query for get all locations
+export const getAllLocationsQuery = async () => {
+    return await prisma.location.findMany()
+}
+
 // query for create location
 export const createLocationQuery = async ({ name, city, details, street, zipCode }: ICreateLocationService) => {
     return await prisma.location.create({

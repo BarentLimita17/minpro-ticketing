@@ -10,3 +10,7 @@ export interface ICreateEventService {
     userUid: string;
 }
 
+export interface IFilterEventService {
+    categoryId?: number;
+    locationId?: number;
+}

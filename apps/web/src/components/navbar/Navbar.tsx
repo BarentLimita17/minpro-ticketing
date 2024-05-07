@@ -29,9 +29,11 @@ export default function Navbar() {
         </Link>
       </div>
       <div className="flex gap-[30px]">
-        <button className="flex gap-2 items-center text-white hover:text-black duration-300">
-          <FaCalendarPlus size={18} />Buat Event
-        </button>
+        <Link className="flex items-center" href="/organizer/add-event">
+          <button className="flex gap-2 items-center text-white hover:text-black duration-300">
+            <FaCalendarPlus size={18} />Buat Event
+          </button>
+        </Link>
         <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 border border-[#319cff] rounded duration-300">
           Masuk
         </button>

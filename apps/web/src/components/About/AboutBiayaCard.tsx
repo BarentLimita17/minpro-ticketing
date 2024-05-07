@@ -1,18 +1,12 @@
 import React from "react";
+import { IAboutBiayaCard } from "./types";
 
-export default function AboutBiayaCard({ type, price, description1, description2, icon, imageBg }: {
-    type: string,
-    price: string,
-    description1: string,
-    description2: string,
-    icon: any,
-    imageBg: string
-}) {
+export default function AboutBiayaCard({ type, price, description1, description2, icon, imageBg }: IAboutBiayaCard) {
     return (
         <div className="card w-96 bg-white text-primary-content shadow-2xl hover:shadow-[#d8ecff]">
             <div className="card-body">
                 <div className="card-actions justify-center mb-[20px]">
-                    <div className={`w-[70px] h-[70px] flex justify-center items-center font-bold py-2 mt-[30px] lg:mt-[0px] px-2 rounded-xl bg-${imageBg}`}>{icon}</div>
+                    <div className={`w-[70px] h-[70px] flex justify-center items-center font-bold py-2 mt-[30px] lg:mt-[0px] px-2 rounded-xl bg-[#${imageBg}]`}>{icon}</div>
                 </div>
                 <div className="card-title justify-center">{type}</div>
                 <hr className="mx-[50px] py-[10px]" />
