@@ -1,5 +1,20 @@
 import { Request, Response, NextFunction } from "express";
-import { createLocationQuery, getLocationByNameQuery } from "@/services/LocationService/LocationService";
+import { createLocationQuery, getLocationByNameQuery, getAllLocationsQuery } from "@/services/LocationService/LocationService";
+
+// controller for get all locations
+export const getAllLocations = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const getAllLocationsResult = await getAllLocationsQuery()
+
+        res.status(200).send({
+            error: false,
+            message: "Locations fetched successfully",
+            data: getAllLocationsResult
+        })
+    } catch (error) {
+        next(error)
+    }
+}
 
 // controller for create location
 export const createLocation = async (req: Request, res: Response, next: NextFunction) => {

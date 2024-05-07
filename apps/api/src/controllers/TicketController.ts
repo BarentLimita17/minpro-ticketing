@@ -18,7 +18,6 @@ export const createTicket = async (req: Request, res: Response, next: NextFuncti
             data: createdTicket
         })
     } catch (error) {
-        console.log(error)
         next(error)
     }
 }

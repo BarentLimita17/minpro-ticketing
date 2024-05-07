@@ -18,7 +18,6 @@ export const createPromotion = async (req: Request, res: Response, next: NextFun
             data: createdPromotion
         })
     } catch (error) {
-        // console.log(error)
         next(error)
     }
 }

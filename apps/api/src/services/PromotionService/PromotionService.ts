@@ -12,7 +12,6 @@ export const getPromotionByCodeQuery = async (code: string) => {
 
 // query for create promotion
 export const createPromotionQuery = async ({ name, code, description, discount, quantity, validityDate, eventId }: ICreatePromotionService) => {
-    console.log(eventId)
     return await prisma.promotion.create({
         data: {
             name: name,
