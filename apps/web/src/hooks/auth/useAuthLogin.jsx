@@ -1,7 +1,7 @@
-import { useAuthMutation } from "../../../api/useAuthMutation"
-import { setCookie } from "../../utils/cookiesHelper"
-import { useDispatch } from "react-redux"
-import { setUser } from "../../redux/slice/userSlice"
+import { useAuthMutation } from "@/api/useAuthMutation"
+import { setCookie } from "@/app/utils/cookiesHelper"
+// import { useDispatch } from "react-redux"
+// import { setUser } from "../../redux/slice/userSlice"
 import { useRouter } from "next/navigation"
 export const useAuthLogin = () => {
     // const dispatch = useDispatch()

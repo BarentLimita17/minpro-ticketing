@@ -19,14 +19,6 @@ const dataCategory = [
     }
 ];
 
-const dataRole = [
-    {
-        name: "participant"
-    },
-    {
-        name: "event organizer"
-    }
-];
 
 const dataUser = [
     {
@@ -47,7 +39,48 @@ const dataUser = [
     }
 ];
 
+const dataLocation = [
+    {
+        name: "Jakarta Convention Center",
+        city: "Jakarta",
+        details: "Plenary Hall",
+        street: "JL. Gatot Subroto No.1 RT.1/RW.3",
+        zipCode: "10270",
+    },
+    {
+        name: "Stadion Merdeka",
+        city: "Gorontalo",
+        details: "Stadion Merdeka",
+        street: "JL. Drs. Achmad Nadjamuddin No. 35",
+        zipCode: "96138",
+    }
+]
+
+const dataRole = [
+    {
+        name: "Customer"
+    },
+    {
+        name: "Event Organizer"
+    }
+]
+
+
 async function main() {
+
+    for (let item of dataRole) {
+        await prisma.role.create({
+            data: item
+        })
+        console.log(`Created role: ${item.name}`)
+    }
+
+    for (let item of dataUser) {
+        await prisma.user.create({
+            data: item
+        })
+        console.log(`Created user: ${item.email}`)
+    }
     for (let item of dataCategory) {
         await prisma.category.create({
             data: item
@@ -55,25 +88,18 @@ async function main() {
         console.log(`Created category: ${item.name}`);
     }
 
-    for (let item of dataRole) {
-        await prisma.role.create({
+    for (let item of dataLocation) {
+        await prisma.location.create({
             data: item
-        });
-        console.log(`Created Role: ${item.name}`);
+        })
+        console.log(`Created location: ${item.name}`)
     }
-
-    for (let item of dataUser) {
-        await prisma.user.create({
-            data: item
-        });
-        console.log(`Created User: ${item.email}`);
-    }
-
-    await prisma.$disconnect();
-    process.exit(0);
+    process.exit(0)
 }
 
 main().catch(error => {
-    console.error(error);
-    process.exit(1);
-});
+    console.error(error)
+    process.exit(1)
+}).finally(async () => {
+    await prisma.$disconnect()
+})

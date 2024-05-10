@@ -1,5 +1,5 @@
 import { Response, Request, NextFunction } from "express"
-import { userRegistrationService } from "@/services/userService"
+import { userRegistrationService } from "@/services/UserService"
 export const discountRegistration = async(req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
         const {email, fullname, password, code, roleId} = req.body

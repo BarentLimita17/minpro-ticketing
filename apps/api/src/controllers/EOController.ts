@@ -1,5 +1,5 @@
 import { Response, Request, NextFunction } from "express"
-import { userRegistrationService, findUserRoleService } from "@/services/userService"
+import { userRegistrationService, findUserRoleService } from "@/services/UserService"
 import { HashPassword } from "@/helpers/Hashing"
 export const eoRegistration = async(req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
@@ -12,7 +12,7 @@ export const eoRegistration = async(req: Request, res: Response, next: NextFunct
             fullname, 
             password: HashedPassword,
             code, 
-            roleId,
+            roleId: 2
         })
 
         res.status(201).send({

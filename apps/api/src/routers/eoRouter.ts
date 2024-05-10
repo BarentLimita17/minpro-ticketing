@@ -4,8 +4,11 @@ import { Router } from "express";
 const router = Router()
 
 // Import Controller
-import { userRegistration } from "../controllers/userController";
 
-router.post('/register',userRegistration)
+
+import { tokenVerify } from "@/helpers/Token";
+import { eoRegistration } from "@/controllers/EoController";
+import { roleVerifyEO } from "@/middleware/Verification/RoleVerify";
+router.post('/register', eoRegistration)
 
 export default router

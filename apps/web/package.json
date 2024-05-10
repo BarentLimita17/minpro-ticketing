@@ -10,19 +10,23 @@
     "test": "npx cypress verify & cypress run --component"
   },
   "dependencies": {
-    "@reduxjs/toolkit": "^2.2.3",
+    "@types/react-toastify": "^4.1.0",
+    "flowbite": "^2.3.0",
+    "flowbite-react": "^0.9.0",
     "next": "14.0.4",
     "react": "^18",
     "react-datepicker": "^6.9.0",
     "react-dom": "^18",
-    "react-redux": "^9.1.2",
-    "react-toastify": "^10.0.5"
+    "react-slick": "^0.30.2",
+    "react-toastify": "^10.0.5",
+    "slick-carousel": "^1.8.1"
   },
   "devDependencies": {
     "@tanstack/react-query": "^5.35.1",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "@types/react-slick": "^0.23.13",
     "antd": "^5.16.4",
     "autoprefixer": "^10.4.19",
     "axios": "^1.6.8",

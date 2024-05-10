@@ -1,6 +1,5 @@
 import { IUserService } from "./types"
 import { prisma } from "@/connection"
-import { ICreateCode } from "./types"
 export const userRegistrationService = async({email, fullname, password, code, roleId}: IUserService) => {
     await prisma.user.create({
         data: {
@@ -8,7 +7,7 @@ export const userRegistrationService = async({email, fullname, password, code, r
             fullname, 
             password,
             code,
-            roleId
+            roleId: 1
         }
     })
 console.log(userRegistrationService)

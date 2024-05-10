@@ -8,7 +8,7 @@ export const eoRegistrationService = async({email, fullname, password, code, rol
             fullname, 
             password,
             code,
-            roleId
+            roleId: 2
         }
     })
 console.log(eoRegistrationService)

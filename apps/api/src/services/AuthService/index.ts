@@ -12,3 +12,15 @@ export const findUserByEmail = async({email}: IFindUserByEmailParams) => {
     
         return findUser
 }
+
+
+export const findUserByUid = async({uid}: {uid: string}) => {
+    return await prisma.user.findUnique({
+        where: {
+            uid
+        },
+        include:{
+            role: true
+        }
+    })
+}

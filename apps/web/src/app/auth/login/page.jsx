@@ -1,6 +1,6 @@
 'use client'
 import { Formik,Form,Field } from "formik"
-import {useAuthLogin} from "../../hooks/auth/useAuthLogin"
+import {useAuthLogin} from '@/hooks/auth/useAuthLogin'
 export default function LoginPage() {
     const{mutationAuth}= useAuthLogin()
     return (   

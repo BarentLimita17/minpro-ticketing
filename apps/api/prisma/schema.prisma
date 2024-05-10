@@ -15,6 +15,8 @@ model Event {
   endTime            DateTime  @db.Time()
   description        String    @db.LongText()
   termsAndConditions String    @db.LongText()
+  bannerUrl          String?
+  thumbnailUrl       String?
   isFree             Boolean   @default(false)
   isPublished        Boolean   @default(false)
   createdAt          DateTime  @default(now())
@@ -91,6 +93,10 @@ model Review {
 model Location {
   id        Int       @id @default(autoincrement())
   name      String    @db.VarChar(255)
+  city      String    @db.VarChar(45)
+  details   String    @db.VarChar(255)
+  street    String    @db.VarChar(45)
+  zipCode   String    @db.VarChar(45)
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   deletedAt DateTime?
@@ -107,7 +113,7 @@ model User {
   code          String    @unique
   isUseCode     Boolean   @default(false)
   roleId        Int
-  isVerified Int @default(0)
+  isVerified    Int       @default(0)
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
   deletedAt     DateTime?

@@ -6,13 +6,17 @@ const router = Router()
 router.use(express.json()) // Body Parser
 
 // Import Admin Router
-import userRouter from './userRouter'
-import authRouter from './authRouter'
-import eoRouter from './eoRouter'
+import UserRouter from './UserRouter'
+import AuthRouter from './AuthRouter'
+import EoRouter from './EoRouter'
+// import EventRouter from './EventRouter'
 // import { createCode } from '@/controllers/userController';
 // import eventOrganizerRouter from './eventOrganizerRouter'
 
-router.use('/user', userRouter)
-router.use('/auth', authRouter)
-router.use('/eo', eoRouter)
+router.use('/user', UserRouter)
+router.use('/auth', AuthRouter)
+router.use('/eo', EoRouter)
+// router.use('/event', EventRouter)
+
+
 export default router

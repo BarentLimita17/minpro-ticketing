@@ -1,5 +1,5 @@
 import { Response, Request, NextFunction } from "express"
-import { userRegistrationService, findUserRoleService } from "@/services/userService"
+import { userRegistrationService, findUserRoleService } from "@/services/UserService"
 import { HashPassword } from "@/helpers/Hashing"
 export const userRegistration = async(req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
@@ -12,7 +12,7 @@ export const userRegistration = async(req: Request, res: Response, next: NextFun
             fullname, 
             password: HashedPassword,
             code, 
-            roleId,
+            roleId:1
         })
 
         res.status(201).send({
@@ -27,13 +27,13 @@ export const userRegistration = async(req: Request, res: Response, next: NextFun
     }
 }
 
-export const findUserRole = async(req: Request, res: Response, next: NextFunction) => {
+export const userRole = async(req: Request, res: Response, next: NextFunction) => {
     try {
         const findUserRole = await findUserRoleService()
 
         res.status(200).send({
             error: false, 
-            message: 'Get Employee Position Success!', 
+            message: 'Get User Role Success!', 
             data: findUserRole
         })
     } catch (error) {
