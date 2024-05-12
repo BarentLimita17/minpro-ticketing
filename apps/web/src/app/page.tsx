@@ -1,14 +1,22 @@
 'use client'
 import React from "react";
 import { FaArrowRight } from "react-icons/fa";
-import { IoLocationSharp, IoCalendar } from "react-icons/io5";
 import Image from "next/image";
 import Link from "next/link";
+import { useGetAllClosestEvents } from "@/hooks/events/useGetAllClosestEvents";
+import { useGetAllPastEvents } from "@/hooks/events/useGetAllPastEvents";
 import Carousel from '@/components/Home/HomeCarousel';
 import { MdPersonAddAlt1 } from "react-icons/md";
 import { FaPlus, FaMoneyBill, FaTicketAlt, FaLongArrowAltRight } from "react-icons/fa";
+import EventsCard from "@/components/Home/EventsCard";
+import EventsCardPast from "@/components/Home/EventsCardPast";
 
 export default function Home() {
+  let eventDate: Date
+  let months: string[]
+  let formattedDate: string;
+  const { dataAllClosestEvents } = useGetAllClosestEvents();
+  const { dataAllPastEvents } = useGetAllPastEvents();
   return (
     <div className='bg-[#fbfbfb] min-h-screen pt-[5%]'>
       <Carousel />
@@ -23,59 +31,15 @@ export default function Home() {
           </button>
         </Link>
       </div>
-      <div className="flex flex-wrap mx-[100px] gap-[40px]">
-        {/* EVENT CARD */}
-        <div className="py-[30px]">
-          <div className="card w-[300px] bg-base-100 shadow-xl">
-            <figure>
-              <button>
-                <Image src="/ROCKAMINATION-IMG.jpg" alt="ROCKAMINATION Banner" width={300} height={200} />
-              </button>
-            </figure>
-            <div className="card-body bg-white">
-              <button className="card-title text-black font-bold text-xl hover:text-[#007bff]">
-                NAMA EVENT
-                <div className="badge badge-secondary">NEW</div>
-              </button>
-              <div className="text-black flex items-center gap-2">
-                <IoCalendar size={20} className="text-[#007bff]" />Tanggal
-              </div>
-              <div className="text-black flex items-center gap-2">
-                <IoLocationSharp size={20} className="text-[#007bff]" />Lokasi
-              </div>
-              <hr className="mt-2" />
-              <div className="card-actions justify-end mt-2">
-                <div className="text-[#ff5900] font-bold">Harga (STARTS FROM)</div>
-              </div>
-            </div>
-          </div>
-        </div>
-        {/* EVENT CARD */}
-        <div className="py-[30px]">
-          <div className="card w-[300px] bg-base-100 shadow-xl">
-            <figure>
-              <button>
-                <Image src="/HEROCK-IMG.png" alt="HEROCK Banner" width={300} height={200} />
-              </button>
-            </figure>
-            <div className="card-body bg-white">
-              <button className="card-title text-black font-bold text-xl hover:text-[#007bff]">
-                NAMA EVENT
-                <div className="badge badge-secondary">NEW</div>
-              </button>
-              <div className="text-black flex items-center gap-2">
-                <IoCalendar size={20} className="text-[#007bff]" />Tanggal
-              </div>
-              <div className="text-black flex items-center gap-2">
-                <IoLocationSharp size={20} className="text-[#007bff]" />Lokasi
-              </div>
-              <hr className="mt-2" />
-              <div className="card-actions justify-end mt-2">
-                <div className="text-[#ff5900] font-bold">Harga (STARTS FROM)</div>
-              </div>
-            </div>
-          </div>
-        </div>
+      <div className="flex flex-wrap mx-[10px] lg:mx-[100px] gap-[23px] justify-center lg:justify-start">
+        {dataAllClosestEvents?.map((event: any) => (
+          eventDate = new Date(event.date),
+          months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+          formattedDate = `${eventDate.getDate()} ${months[eventDate.getMonth()]} ${eventDate.getFullYear()}`,
+          <Link key={event.id} href={`/events/${event.id}`}>
+            < EventsCard name={event.name} banner={event.bannerUrl} date={formattedDate} location={event.location.name} price={event.eventTicket.length == 0 ? "Free" : (event.eventTicket[0].price).toLocaleString("id-ID", { style: "currency", currency: "IDR" })} />
+          </Link>
+        ))}
       </div>
       {/* DIV PAST EVENT */}
       <div className="mt-[5%] lg:mt-[2%] mx-[100px] flex">
@@ -83,61 +47,16 @@ export default function Home() {
           PAST EVENT
         </div>
       </div>
-      <div className="flex flex-wrap mx-[100px] gap-[40px]">
-        {/* EVENT CARD */}
-        <div className="py-[30px]">
-          <div className="card w-[300px] bg-base-100 shadow-xl">
-            <figure>
-              <button>
-                <Image src="/GLORIOUS-IMG.jpg" alt="GLORIOUS Banner" width={300} height={200} />
-              </button>
-            </figure>
-            <div className="card-body bg-white">
-              <button className="card-title text-black font-bold text-xl hover:text-[#007bff]">
-                NAMA EVENT
-                <div className="badge badge-secondary">NEW</div>
-              </button>
-              <div className="text-black flex items-center gap-2">
-                <IoCalendar size={20} className="text-[#007bff]" />Tanggal
-              </div>
-              <div className="text-black flex items-center gap-2">
-                <IoLocationSharp size={20} className="text-[#007bff]" />Lokasi
-              </div>
-              <hr className="mt-2" />
-              <div className="card-actions justify-end mt-2">
-                <div className="text-[#ff5900] font-bold">Harga (STARTS FROM)</div>
-              </div>
-            </div>
-          </div>
-        </div>
-        {/* EVENT CARD */}
-        <div className="py-[30px]">
-          <div className="card w-[300px] bg-base-100 shadow-xl">
-            <figure>
-              <button>
-                <Image src="/HARSASORA-IMG.png" alt="HARSASORA Banner" width={300} height={200} />
-              </button>
-            </figure>
-            <div className="card-body bg-white">
-              <button className="card-title text-black font-bold text-xl hover:text-[#007bff]">
-                NAMA EVENT
-                <div className="badge badge-secondary">NEW</div>
-              </button>
-              <div className="text-black flex items-center gap-2">
-                <IoCalendar size={20} className="text-[#007bff]" />Tanggal
-              </div>
-              <div className="text-black flex items-center gap-2">
-                <IoLocationSharp size={20} className="text-[#007bff]" />Lokasi
-              </div>
-              <hr className="mt-2" />
-              <div className="card-actions justify-end mt-2">
-                <div className="text-[#ff5900] font-bold">Harga (STARTS FROM)</div>
-              </div>
-            </div>
-          </div>
-        </div>
+      <div className="flex flex-wrap mx-[10px] lg:mx-[100px] gap-[23px] justify-center lg:justify-start">
+        {dataAllPastEvents?.map((pastEvent: any) => (
+          eventDate = new Date(pastEvent.date),
+          months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+          formattedDate = `${eventDate.getDate()} ${months[eventDate.getMonth()]} ${eventDate.getFullYear()}`,
+          <Link key={pastEvent.id} href={`/events/${pastEvent.id}`}>
+            < EventsCardPast name={pastEvent.name} banner={pastEvent.bannerUrl} date={formattedDate} location={pastEvent.location.name} />
+          </Link>
+        ))}
       </div>
-      {/* DIV CARA PEMBELIAN TIKET */}
       <div className="w-auto h-auto flex justify-center mx-[100px] mt-[5%] lg:mt-[7%] pb-[5%]">
         <div className="card w-full bg-white shadow-2xl">
           <div className="card-body">
@@ -193,8 +112,6 @@ export default function Home() {
           </div>
         </div>
       </div>
-
-      {/* DIV BANNER ABOUT US */}
       <div className="w-auto h-auto flex justify-center mx-[30px] lg:mx-[100px] mt-[5%] lg:mt-[2%] pb-[5%]">
         <Link href="/about">
           <button className="justify-center items-center flex w-[100%]">

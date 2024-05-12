@@ -97,6 +97,8 @@ model Location {
   details   String    @db.VarChar(255)
   street    String    @db.VarChar(45)
   zipCode   String    @db.VarChar(45)
+  latitude  Float     @default(0)
+  longitude Float     @default(0)
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   deletedAt DateTime?

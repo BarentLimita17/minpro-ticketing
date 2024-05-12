@@ -32,7 +32,9 @@
     }
   },
   "dependencies": {
+    "@editorjs/editorjs": "^2.29.1",
     "react-draft-wysiwyg": "^1.15.0",
-    "sweetalert2": "^11.10.8"
+    "sweetalert2": "^11.10.8",
+    "use-debounce": "^10.0.0"
   }
 }

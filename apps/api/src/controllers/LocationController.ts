@@ -19,12 +19,12 @@ export const getAllLocations = async (req: Request, res: Response, next: NextFun
 // controller for create location
 export const createLocation = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const { name, city, details, street, zipCode } = req.body
+        const { name, city, details, street, zipCode, latitude, longitude } = req.body
 
         const findLocationByNameResult = await getLocationByNameQuery(name)
         if (findLocationByNameResult?.details == details) throw new Error("Location already exists.")
 
-        const createdLocation = await createLocationQuery({ name, city, details, street, zipCode })
+        const createdLocation = await createLocationQuery({ name, city, details, street, zipCode, latitude, longitude })
 
         res.status(201).send({
             error: false,

@@ -1,17 +1,19 @@
 'use client'
-import { useState, useEffect } from 'react';
-import { Formik, Form, Field } from 'formik';
-import { FaClock, FaCalendarAlt } from "react-icons/fa";
+import { useState } from 'react';
+import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { useGetCategoryAndLocation } from '@/hooks/events/useGetCategoryAndLocation';
 import { useCreateEvent } from '@/hooks/events/useCreateEvent';
 import { CreateLocationModal } from '@/components/AddEvent/CreateLocationModal';
+import { createEventSchema } from '@/schema/CreateEventSchema';
+import Link from 'next/link';
 
-export default function EventsPage() {
+export default function AddEventsPage() {
     const [selectedBannerFiles, setSelectedBannerFiles]: any = useState([])
     const [selectedThumbnaillFiles, setSelectedThumbnailFiles]: any = useState([])
     const { dataLocation, dataCategory }: any = useGetCategoryAndLocation()
     const [showModal, setShowModal] = useState(false);
     const { mutationCreateEvent } = useCreateEvent()
+    let createdEventResult: any;
 
     const onSetBannerFiles = (event: any) => {
         try {
@@ -29,7 +31,7 @@ export default function EventsPage() {
 
             if (files.length > 1) throw { message: `You cannot select more than 1 image` }
 
-            setSelectedBannerFiles(files) // Array of Object
+            setSelectedBannerFiles(files)
         } catch (error) {
             console.log(error)
         }
@@ -64,12 +66,12 @@ export default function EventsPage() {
             <CreateLocationModal visible={showModal} onClose={() => setShowModal(false)} />
             <div className="bg-[#fbfbfb] min-h-screen ">
                 <div className="py-[70px] mx-[20px] lg:mx-[300px]">
-                    <div className="flex flex-col text-start gap-2 mb-[20px]">
+                    <div className="flex flex-col text-start gap-2 mt-0 lg:mt-[50px] mb-[20px]">
                         <div className="text-[35px] pl-[30px] font-bold text-[#002744]">
                             Create Event
                         </div>
                     </div>
-                    <div className="card w-full bg-white text-primary-content shadow-2xl hover:shadow-[#d8ecff]">
+                    <div className="card w-full bg-gray-300 text-primary-content shadow-2xl hover:shadow-[#d8ecff]">
                         <div className="card-body">
                             <Formik
                                 initialValues={{
@@ -83,7 +85,8 @@ export default function EventsPage() {
                                     categoryId: '',
                                     userUid: 'clvi4ghqz0001mbv5iohu4138',
                                 }}
-                                onSubmit={async (values) => {
+                                validationSchema={createEventSchema}
+                                onSubmit={async (values, { resetForm }) => {
                                     try {
                                         const fd = new FormData();
                                         fd.append('data', JSON.stringify({
@@ -100,7 +103,11 @@ export default function EventsPage() {
                                         fd.append('bannerurl', selectedBannerFiles[0]);
                                         fd.append('thumbnailurl', selectedThumbnaillFiles[0]);
 
-                                        await mutationCreateEvent(fd);
+                                        createdEventResult = await mutationCreateEvent(fd);
+
+                                        setSelectedBannerFiles([])
+                                        setSelectedThumbnailFiles([])
+                                        resetForm();
 
                                     } catch (error) {
                                         console.error('Error during form submission:', error);
@@ -118,12 +125,14 @@ export default function EventsPage() {
                                                             <span className="label-text font-bold text-black">Name</span>
                                                         </label>
                                                         <Field type="text" name="name" placeholder="Event Name" className="input input-bordered bg-[#f3f3f3]" />
+                                                        <ErrorMessage name="name" component="div" className="text-red-500" />
                                                     </div>
                                                     <div className="form-control w-[50%]">
                                                         <label className="label">
                                                             <span className="label-text font-bold text-black">Category</span>
                                                         </label>
-                                                        <Field as="select" id='categoryId' name="categoryId" className="input input-bordered bg-[#f3f3f3]" >
+                                                        <Field as="select" id='categoryId' defaultValue="" name="categoryId" className="input input-bordered bg-[#f3f3f3]" >
+                                                            <option disabled value="">Choose Category</option>
                                                             {
                                                                 dataCategory?.map((category: any) => {
                                                                     return (
@@ -132,6 +141,7 @@ export default function EventsPage() {
                                                                 })
                                                             }
                                                         </Field>
+                                                        <ErrorMessage name="categoryId" component="div" className="text-red-500" />
                                                     </div>
                                                 </div>
                                                 <div className='flex gap-3 mt-[10px]'>
@@ -139,7 +149,8 @@ export default function EventsPage() {
                                                         <label className="label">
                                                             <span className="label-text font-bold text-black">Location</span>
                                                         </label>
-                                                        <Field component="select" id='locationId' name="locationId" className="input input-bordered bg-[#f3f3f3]" >
+                                                        <Field component="select" id='locationId' defaultValue="" name="locationId" className="input input-bordered bg-[#f3f3f3]" >
+                                                            <option disabled value="">Choose Location</option>
                                                             {
                                                                 dataLocation?.map((location: any) => {
                                                                     return (
@@ -148,6 +159,7 @@ export default function EventsPage() {
                                                                 })
                                                             }
                                                         </Field>
+                                                        <ErrorMessage name="locationId" component="div" className="text-red-500" />
                                                     </div>
                                                     <div className="form-control w-[50%]">
                                                         <label className="label">
@@ -164,10 +176,8 @@ export default function EventsPage() {
                                                             <span className="label-text font-bold text-black">Date</span>
                                                         </label>
                                                         <div className="relative w-full">
-                                                            <Field type="date" name="date" className="input input-bordered bg-[#f3f3f3] w-full" />
-                                                            <span className="absolute top-0 right-0 flex items-center h-full px-3">
-                                                                <FaCalendarAlt />
-                                                            </span>
+                                                            <Field type="date" name="date" className="input input-bordered bg-gray-400 w-full text-black" />
+                                                            <ErrorMessage name="date" component="div" className="text-red-500" />
                                                         </div>
                                                     </div>
                                                 </div>
@@ -176,11 +186,9 @@ export default function EventsPage() {
                                                         <label className="label">
                                                             <span className="label-text font-bold text-black">Start Time</span>
                                                         </label>
-                                                        <div className="relative w-full">
-                                                            <Field type="time" name="startTime" className="input input-bordered bg-[#f3f3f3] w-full" />
-                                                            <span className="absolute top-0 right-0 flex items-center h-full px-3">
-                                                                <FaClock />
-                                                            </span>
+                                                        <div className="w-full">
+                                                            <Field type="time" name="startTime" className="input input-bordered bg-gray-400 w-full text-black" />
+                                                            <ErrorMessage name="startTime" component="div" className="text-red-500" />
                                                         </div>
                                                     </div>
                                                     <div className="form-control w-[50%]">
@@ -188,30 +196,30 @@ export default function EventsPage() {
                                                             <span className="label-text font-bold text-black">End Time</span>
                                                         </label>
                                                         <div className="relative w-full">
-                                                            <Field type="time" name="endTime" className="input input-bordered bg-[#f3f3f3] w-full" />
-                                                            <span className="absolute top-0 right-0 flex items-center h-full px-3">
-                                                                <FaClock />
-                                                            </span>
+                                                            <Field type="time" name="endTime" className="input input-bordered bg-gray-400 w-full text-black" />
+                                                            <ErrorMessage name="endTime" component="div" className="text-red-500" />
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div className="form-control">
+                                                <div className="form-control mt-[10px]">
                                                     <label className="label">
                                                         <span className="label-text font-bold text-black">Description</span>
                                                     </label>
                                                     <Field as="textarea" name="description" placeholder="Description" className="input input-bordered bg-[#f3f3f3] h-[300px]" />
+                                                    <ErrorMessage name="description" component="div" className="text-red-500" />
                                                 </div>
-                                                <div className="form-control">
+                                                <div className="form-control mt-[10px]">
                                                     <label className="label">
                                                         <span className="label-text font-bold text-black">Terms and Conditions</span>
                                                     </label>
                                                     <Field as="textarea" name="termsAndConditions" placeholder="Terms and Conditions" className="input input-bordered bg-[#f3f3f3] h-[300px]" />
+                                                    <ErrorMessage name="termsAndConditions" component="div" className="text-red-500" />
                                                 </div>
                                                 <div className='flex gap-3 mt-[10px]'>
-                                                    <div className='w-full'>
+                                                    <div className='w-[50%]'>
                                                         <label className='form-control w-full'>
                                                             <div className='label'>
-                                                                <span className='label-text font-bold text-white'>Select Banner Image</span>
+                                                                <span className='label-text font-bold text-black'>Select Banner Image</span>
                                                             </div>
                                                             <input
                                                                 type="file"
@@ -222,10 +230,10 @@ export default function EventsPage() {
                                                             />
                                                         </label>
                                                     </div>
-                                                    <div className='w-full'>
+                                                    <div className='w-[50%]'>
                                                         <label className='form-control w-full'>
                                                             <div className='label'>
-                                                                <span className='label-text font-bold text-white'>Select Thumbnail Image</span>
+                                                                <span className='label-text font-bold text-black'>Select Thumbnail Image</span>
                                                             </div>
                                                             <input
                                                                 type="file"
@@ -238,7 +246,9 @@ export default function EventsPage() {
                                                     </div>
                                                 </div>
                                                 <div className="form-control mt-6">
-                                                    <button disabled={!(dirty && isValid)} className="btn btn-primary">Save</button>
+                                                    <Link href={`/organizer/add-event/${createdEventResult.id}/add-ticketpromotion`}>
+                                                        <button disabled={!(dirty && isValid)} className="btn btn-primary">Save</button>
+                                                    </Link>
                                                 </div>
                                             </Form>
                                         </>
