@@ -20,10 +20,12 @@ export const useGetCategoryAndLocationQuery = () => {
             ]
         }
     )
+    const refetchLocation = location.refetch;
 
 
     return {
         category,
-        location
+        location,
+        refetchLocation
     }
 }

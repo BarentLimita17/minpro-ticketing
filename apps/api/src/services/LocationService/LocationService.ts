@@ -16,14 +16,16 @@ export const getAllLocationsQuery = async () => {
 }
 
 // query for create location
-export const createLocationQuery = async ({ name, city, details, street, zipCode }: ICreateLocationService) => {
+export const createLocationQuery = async ({ name, city, details, street, zipCode, latitude, longitude }: ICreateLocationService) => {
     return await prisma.location.create({
         data: {
             name: name,
             city: city,
             details: details,
             street: street,
-            zipCode: zipCode
+            zipCode: zipCode,
+            latitude: latitude,
+            longitude: longitude
         }
     })
 }

@@ -1,0 +1,194 @@
+'use client'
+import { useGetEventDetails } from "@/hooks/events/useGetEventDetails";
+import Image from "next/image";
+import Map from "@/components/Map";
+import { Tabs } from "flowbite-react";
+import { IoTicket } from "react-icons/io5";
+import { CiDiscount1 } from "react-icons/ci";
+import { CreateTicketModal } from "@/components/AddEvent/CreateTicketModal";
+import { CreatePromotionModal } from "@/components/AddEvent/CreatePromotionModal";
+import { useState } from "react";
+import CreatedTicketCard from "@/components/AddEvent/CreatedTicketCard";
+import CreatePromotionCard from "@/components/AddEvent/CreatePromotionCard";
+import { usePublishEvent } from "@/hooks/events/usePublishEvent";
+import Link from "next/link";
+
+const formatDate = (dateString: string | undefined) => {
+    if (!dateString) return '';
+    const eventDate = new Date(dateString);
+    const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    return `${eventDate.getDate()} ${months[eventDate.getMonth()]} ${eventDate.getFullYear()}`;
+}
+
+const formatTime = (timeString: string | undefined) => {
+    if (!timeString) return '';
+    const time = new Date(timeString);
+    const hours = ('0' + time.getHours()).slice(-2);
+    const minutes = ('0' + time.getMinutes()).slice(-2);
+    return `${hours}:${minutes} WIB`;
+}
+
+export default function AddTicketPromotionPage({ params }: any) {
+    const { dataEventDetails } = useGetEventDetails(params.eventId)
+    const [showTicketModal, setShowTicketModal] = useState(false);
+    const [showPromotionModal, setShowPromotionModal] = useState(false);
+    const [isFreeEvent, setIsFreeEvent] = useState(false);
+    const { mutationPublishEvent } = usePublishEvent()
+
+    const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setIsFreeEvent(event.target.checked);
+    };
+
+    const handlePublishEvent = () => {
+        mutationPublishEvent({ eventId: params.eventId })
+    }
+
+    return (
+        <div className="bg-[#fbfbfb] h-auto pt-[5%]">
+            <div className="flex py-[30px] lg:mx-[200px] gap-[30px]">
+                {/* DIV KIRI */}
+                <div className="flex flex-col mt-[30px] w-[60%]">
+                    {/* BANNER OVERVIEW */}
+                    <div className="flex justify-center">
+                        <Image src={`http://localhost:8000/${dataEventDetails?.bannerUrl}`} className="rounded-3xl" alt="Event Banner" width={600} height={400} />
+                    </div>
+                    {/* EVENT DETAILS OVERVIEW */}
+                    <div className="card mt-[30px] pb-[30px] shadow-2xl rounded-xl gap-10 bg-[#d1d5db]">
+                        <div className="text-black text-center text-[30px] font-bold justify-start mt-[20px]">
+                            YOUR DETAILS
+                        </div>
+                        {/* EVENT NAME */}
+                        <div className="card-body justify-start rounded-xl mx-[20px] hover:text-[25px] hover:mx-0 hover:scale-110 duration-300 bg-[#b5b9c1]">
+                            <div className="text-[15px] text-[#1a56db] font-bold ">
+                                JUDUL
+                            </div>
+                            <div className="text-black text-justify font-bold">
+                                {dataEventDetails?.name}
+                            </div>
+                        </div>
+                        {/* EVENT CATEGORY */}
+                        <div className="card-body justify-start rounded-xl mx-[20px] hover:text-[25px] hover:mx-0 hover:scale-110 duration-300 bg-[#b5b9c1]">
+                            <div className="text-[15px] text-[#1a56db] font-bold">
+                                KATEGORI
+                            </div>
+                            <div className="text-black text-justify font-bold">
+                                {dataEventDetails?.Category?.name}
+                            </div>
+                        </div>
+                        {/* EVENT TIME AND DATE */}
+                        <div className="card-body justify-start rounded-xl mx-[20px] hover:text-[20px] hover:mx-0 hover:scale-110 duration-300 bg-[#b5b9c1]">
+                            <div className="text-[15px] text-[#1a56db] font-bold">
+                                TANGGAL DAN WAKTU
+                            </div>
+                            <div className="text-black text-justify font-bold">
+                                {formatDate(dataEventDetails?.date)}
+                            </div>
+                            <div className="text-black text-justify font-bold">
+                                {formatTime(dataEventDetails?.startTime)} - {formatTime(dataEventDetails?.endTime)}
+                            </div>
+                        </div>
+                        {/* DESCRIPTION */}
+                        <div className="card-body justify-start rounded-xl mx-[20px] hover:text-[16px] hover:mx-0 hover:scale-110 duration-300 bg-[#b5b9c1]">
+                            <div className="text-[15px] text-[#1a56db] font-bold">
+                                DESKRIPSI
+                            </div>
+                            <div className="text-black text-justify font-bold">
+                                {dataEventDetails?.description}
+                            </div>
+                        </div>
+                        {/* MAP */}
+                        <div>
+                            <div className="card-body justify-start rounded-xl mx-[20px] hover:text-[20px] hover:mx-0 hover:scale-110 duration-300 bg-[#b5b9c1]">
+                                <div className="text-[15px] text-[#1a56db] font-bold">
+                                    LOKASI
+                                </div>
+                                <div className="text-black text-justify font-bold">
+                                    {dataEventDetails?.location?.name}, {dataEventDetails?.location?.city}
+                                </div>
+                                <div className="text-black text-justify font-bold">
+                                    {dataEventDetails?.location?.details}
+                                </div>
+                                <div>
+                                    <Map height={300} lat={dataEventDetails?.location?.latitude} lng={dataEventDetails?.location?.longitude} />
+                                </div>
+                            </div>
+                        </div>
+                        {/* T & C */}
+                        <div className="card-body justify-start rounded-xl mx-[20px] hover:text-[16px] hover:mx-0 hover:scale-110 duration-300 bg-[#b5b9c1]">
+                            <div className="text-[15px] text-[#1a56db] font-bold">
+                                SYARAT DAN KETENTUAN
+                            </div>
+                            <div className="text-black text-justify font-bold">
+                                {dataEventDetails?.termsAndConditions}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {/* RIGHT SECTION */}
+                <div className="flex flex-col mt-[30px] w-[40%]">
+                    {/* DIV ACTIONS */}
+                    <div className="flex flex-col h-[243px]">
+                        <div className="text-lg font-bold w-full mb-2 text-center text-black">
+                            ACTIONS
+                        </div>
+                        <Link href={`/events`}>
+                            <button onClick={handlePublishEvent} className="bg-blue-500 hover:bg-blue-400 w-full text-white font-semibold py-2 px-[50px] rounded-lg mb-2">
+                                Publish
+                            </button>
+                        </Link>
+                        <Link href={`/organizer/add-event/${params.eventId}/update-event`}>
+                            <button className="bg-green-500 hover:bg-green-400 w-full text-white font-semibold py-2 px-[50px] rounded-lg">
+                                Update Event
+                            </button>
+                        </Link>
+                    </div>
+                    {/* DIV ADD TICKET AND PROMOTION */}
+                    {isFreeEvent ? null : (
+                        <div className="flex flex-col h-auto mt-[30px]">
+                            {/* DIV FREE EVENTS CHECKBOX */}
+                            <div className="form-control">
+                                <label className="label cursor-pointer justify-start gap-3">
+                                    <span className="text-black font-bold text-[20px]">Free Events</span>
+                                    <input type="checkbox" className="checkbox checkbox-primary" />
+                                </label>
+                            </div>
+                            {/* DIV TABS ADD TICKET AND PROMOTION */}
+                            <div className="overflow-x-auto ">
+                                <Tabs aria-label="Full width tabs" className="shadow-xl" style="fullWidth">
+                                    <Tabs.Item title="Tambah Tiket" active icon={IoTicket}>
+                                        <CreateTicketModal eventId={params.eventId} visible={showTicketModal} onClose={() => setShowTicketModal(false)} />
+                                        <div className="flex justify-center mt-[10px] text-black font-bold">
+                                            ADD YOUR TICKET
+                                        </div>
+                                        {dataEventDetails?.eventTicket?.map((ticket: any) => (
+                                            <CreatedTicketCard key={ticket.id} id={ticket.id} name={ticket.name} description={ticket.description} price={ticket.price.toLocaleString("id-ID", { style: "currency", currency: "IDR" })} quantity={ticket.quantity} validityDate={ticket.validityDate} />
+                                        ))}
+                                        <div className="flex flex-col gap-3">
+                                            <div onClick={() => setShowTicketModal(true)} className="btn btn-success mt-[15px] bg-gray-300 hover:bg-gray-600 text-white flex justify-center h-[150px] font-bold">
+                                                ADD MORE TICKET +
+                                            </div>
+                                        </div>
+                                    </Tabs.Item>
+                                    <Tabs.Item title="Tambah Promosi" icon={CiDiscount1}>
+                                        <CreatePromotionModal eventId={params.eventId} visible={showPromotionModal} onClose={() => setShowPromotionModal(false)} />
+                                        <div className="flex justify-center mt-[10px] text-black font-bold">
+                                            ADD YOUR PROMOTION
+                                        </div>
+                                        {dataEventDetails?.promotion?.map((promotion: any) => (
+                                            <CreatePromotionCard key={promotion.id} id={promotion.id} name={promotion.name} code={promotion.code} quantity={promotion.quantity} description={promotion.description} discount={promotion.discount} validityDate={promotion.validityDate} />
+                                        ))}
+                                        <div className="flex flex-col gap-3">
+                                            <div onClick={() => setShowPromotionModal(true)} className="btn btn-success mt-[15px] bg-gray-300 hover:bg-gray-600 text-white flex justify-center h-[150px] font-bold">
+                                                ADD MORE PROMOTION +
+                                            </div>
+                                        </div>
+                                    </Tabs.Item>
+                                </Tabs>
+                            </div>
+                        </div>
+                    )}
+                </div>
+            </div >
+        </div >
+    )
+}

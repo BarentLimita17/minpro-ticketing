@@ -1,18 +1,22 @@
 'use client'
 import { useState } from "react";
-import { ICreateLocationModal } from "./types";
+import { ICreateModal } from "./types";
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { useCreateLocation } from "@/hooks/locations/useCreateLocation";
 import { createLocationSchema } from "@/schema/CreateLocationSchema";
+import { useGetCategoryAndLocationQuery } from "@/api/useGetCategoryAndLocationQuery";
+import Link from "next/link";
 
-export const CreateLocationModal = ({ visible, onClose }: ICreateLocationModal) => {
+export const CreateLocationModal = ({ visible, onClose }: ICreateModal) => {
     const [isLoading, setIsLoading] = useState(false)
+    const { refetchLocation } = useGetCategoryAndLocationQuery()
 
     const { mutationCreateLocation } = useCreateLocation();
     if (!visible) return null;
 
     const handleOnClose = (e: any) => {
         if (e.target.id === "container") onClose();
+        refetchLocation()
     };
 
     return (
@@ -33,18 +37,32 @@ export const CreateLocationModal = ({ visible, onClose }: ICreateLocationModal) 
                             city: "",
                             details: "",
                             street: "",
-                            zipCode: ""
+                            zipCode: "",
+                            latitude: "",
+                            longitude: ""
                         }}
                         validationSchema={createLocationSchema}
-                        onSubmit={(values) => {
+                        onSubmit={(values, { resetForm }) => {
                             setIsLoading(true)
                             mutationCreateLocation({
                                 name: values.name,
                                 city: values.city,
                                 details: values.details,
                                 street: values.street,
-                                zipCode: values.zipCode
-                            })
+                                zipCode: values.zipCode,
+                                latitude: parseFloat(values.latitude),
+                                longitude: parseFloat(values.longitude)
+                            },
+                                {
+                                    onSuccess: () => {
+                                        setIsLoading(false)
+                                        resetForm()
+                                    },
+                                    onError: () => {
+                                        setIsLoading(false)
+                                    }
+                                }
+                            )
                         }}
                     >
                         {({ dirty, isValid }) => {
@@ -76,6 +94,27 @@ export const CreateLocationModal = ({ visible, onClose }: ICreateLocationModal) 
                                         </label>
                                         <Field name="zipCode" type="text" className="border border-gray-700 p-2 rounded text-black" placeholder="E.g., 12345" />
                                         <ErrorMessage name="zipCode" component="div" className="text-red-500" />
+                                        <div className="flex justify-between">
+                                            <div className="flex flex-col">
+                                                <label className="label">
+                                                    <span className="label-text font-bold text-black">Latitude</span>
+                                                </label>
+                                                <Field name="latitude" type="text" className="w-[170px] border border-gray-700 p-2 rounded text-black" placeholder="E.g., 37.7749" />
+                                                <ErrorMessage name="latitude" component="div" className="text-red-500" />
+                                            </div>
+                                            <Link className="flex items-center" target="_blank" href="https://www.google.co.id/maps">
+                                                <div className="flex justify-center items-center hover:text-blue-600 mt-[30px] text-center text-black">
+                                                    Find Yours?
+                                                </div>
+                                            </Link>
+                                            <div className="flex flex-col">
+                                                <label className="label">
+                                                    <span className="label-text font-bold text-black">Longitude</span>
+                                                </label>
+                                                <Field name="longitude" type="text" className="w-[170px] border border-gray-700 p-2 rounded text-black" placeholder="E.g., -122.4194" />
+                                                <ErrorMessage name="longitude" component="div" className="text-red-500" />
+                                            </div>
+                                        </div>
                                     </div>
                                     <div className="text-center">
                                         <button disabled={!(dirty && isValid) || isLoading} type="submit" className="px-5 py-2 bg-gray-700 text-white rounded mt-5">

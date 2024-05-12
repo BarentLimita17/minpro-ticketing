@@ -13,24 +13,24 @@ export default function Navbar() {
       </div>
       <div className="flex justify-center gap-[70px]">
         <Link href={"/"}>
-          <button className="text-white hover:text-black duration-300">
+          <button className="text-white font-bold hover:text-[#d1d5db] duration-300">
             BERANDA
           </button>
         </Link>
         <Link href={"/events"}>
-          <button className="text-white hover:text-black duration-300">
+          <button className="text-white font-bold hover:text-[#d1d5db] duration-300">
             EVENTS
           </button>
         </Link>
         <Link href="/about">
-          <button className="text-white hover:text-black duration-300">
+          <button className="text-white font-bold hover:text-[#d1d5db] duration-300">
             TENTANG KAMI
           </button>
         </Link>
       </div>
       <div className="flex gap-[30px]">
         <Link className="flex items-center" href="/organizer/add-event">
-          <button className="flex gap-2 items-center text-white hover:text-black duration-300">
+          <button className="flex gap-2 items-center text-white hover:text-[#d1d5db] duration-300">
             <FaCalendarPlus size={18} />Buat Event
           </button>
         </Link>
