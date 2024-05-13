@@ -4,11 +4,11 @@ import { useCreateEventMutation } from "@/api/useCreateEventMutation"
 export const useCreateEvent = () => {
     const { mutate: mutationCreateEvent } = useCreateEventMutation({
         onSuccess: () => {
-            toast.success("Event created successfully")
+            toast.success("Event Has Been Saved")
         },
         onError: (error) => {
             console.log(error)
-            toast.error(error.message)
+            toast.error("Event failed to create")
         }
     })
 

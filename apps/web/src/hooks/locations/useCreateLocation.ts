@@ -3,13 +3,10 @@ import { toast } from 'react-toastify'
 
 export const useCreateLocation = () => {
     const { mutate: mutationCreateLocation } = useCreateLocationQuery({
-        onSuccess: (data: any) => {
-            // console.log(data)
-            // window.location.reload()
+        onSuccess: (data: string) => {
             toast.success("Location Created");
         },
-        onError: (error: any) => {
-            console.log(error)
+        onError: (error: Error) => {
             toast.error("Failed to Create Location")
         }
     })

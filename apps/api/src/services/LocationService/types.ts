@@ -4,4 +4,6 @@ export interface ICreateLocationService {
     details: string;
     street: string;
     zipCode: string;
+    latitude: number;
+    longitude: number;
 }

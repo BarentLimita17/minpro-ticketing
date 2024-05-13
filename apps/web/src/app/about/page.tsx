@@ -5,7 +5,6 @@ import { WelcomeEOCardContents, PartnershipImagesContents, BiayaContents } from 
 
 export default function AboutPage() {
     return (
-
         <div className="bg-[#fbfbfb] min-h-screen">
             <div className="hero h-[400px]" style={{ backgroundImage: 'url(/ABOUT-BANNER-HERO.jpg)' }}>
                 <div className="hero-overlay bg-opacity-80"></div>

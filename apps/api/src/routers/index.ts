@@ -5,6 +5,7 @@ import express, {Router} from 'express';
 const router = Router()
 router.use(express.json()) // Body Parser
 
+
 // Import Admin Router
 import UserRouter from './UserRouter'
 import AuthRouter from './AuthRouter'
@@ -16,6 +17,7 @@ import EoRouter from './EoRouter'
 router.use('/user', UserRouter)
 router.use('/auth', AuthRouter)
 router.use('/eo', EoRouter)
+router.use('*/image', express.static('src/public/image'))
 // router.use('/event', EventRouter)
 
 

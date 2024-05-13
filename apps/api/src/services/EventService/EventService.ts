@@ -1,9 +1,82 @@
-import { ICreateEventService, IFilterEventService } from "./types";
+import { ICreateEventService, IUpdateEventService } from "./types";
 import { prisma } from "@/connection";
+import { Prisma } from '@prisma/client';
 
-// query for get all events
-export const getAllEventsQuery = async () => {
-    return await prisma.event.findMany()
+// query for get all events by city and event name
+export const getAllActiveEventsQuery = async (city?: string, eventName?: string, categoryId?: string) => {
+    let queryFilters: Prisma.EventWhereInput = {
+        date: {
+            gte: new Date(Date.now())
+        }
+    };
+
+    if (city) {
+        queryFilters = {
+            ...queryFilters,
+            location: {
+                city: {
+                    contains: city
+                }
+            }
+        };
+    }
+    if (eventName) {
+        queryFilters = {
+            ...queryFilters,
+            name: {
+                contains: eventName
+            }
+        };
+    }
+    if (categoryId) {
+        queryFilters = {
+            ...queryFilters,
+            Category: {
+                id: Number(categoryId)
+            }
+        };
+    }
+    return await prisma.event.findMany({
+        where: queryFilters,
+        include: {
+            location: true,
+            Category: true,
+            eventTicket: true
+        }
+    });
+};
+
+// query for get all past events
+export const getAllPastEventsQuery = async () => {
+    return await prisma.event.findMany({
+        where: {
+            date: {
+                lt: new Date(Date.now())
+            }
+        },
+        include: {
+            location: true,
+            Category: true,
+            eventTicket: true
+        }
+    })
+}
+
+// query for get all closest events
+export const getAllClosestEventsQuery = async () => {
+    return await prisma.event.findMany({
+        where: {
+            date: {
+                gte: new Date(Date.now()),
+                lt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
+            }
+        },
+        include: {
+            location: true,
+            Category: true,
+            eventTicket: true
+        }
+    })
 }
 
 // query for get all categories
@@ -11,43 +84,17 @@ export const getAllCategoriesQuery = async () => {
     return await prisma.category.findMany()
 }
 
-// query for filtering events by category or location
-export const getEventByCategoryOrLocationQuery = async (filterParams: any) => {
-    const { categoryId, locationId } = filterParams;
-
-    if (categoryId && locationId) {
-        // Filter events by both categoryId and locationId
-        return await prisma.event.findMany({
-            where: {
-                categoryId: Number(categoryId),
-                locationId: Number(locationId)
-            }
-        });
-    } else if (categoryId) {
-        // Filter events by categoryId
-        return await prisma.event.findMany({
-            where: {
-                categoryId: Number(categoryId)
-            }
-        });
-    } else if (locationId) {
-        // Filter events by locationId
-        return await prisma.event.findMany({
-            where: {
-                locationId: Number(locationId)
-            }
-        });
-    } else {
-        // If neither categoryId nor location is provided, return all events
-        return await prisma.event.findMany();
-    }
-}
-
 // query for get event by id
 export const getEventByIdQuery = async (id: number) => {
     return await prisma.event.findUnique({
         where: {
             id: id
+        },
+        include: {
+            location: true,
+            Category: true,
+            eventTicket: true,
+            promotion: true
         }
     })
 }
@@ -65,6 +112,40 @@ export const createEventQuery = async (data: ICreateEventService, uploadedBanner
             locationId: Number(data.locationId),
             categoryId: Number(data.categoryId),
             userUid: data.userUid,
+            bannerUrl: uploadedBannerUrl[0].path,
+            thumbnailUrl: uploadedThumbnailUrl[0].path
+        }
+    })
+}
+
+// query for publish event
+export const publishEventQuery = async (eventId: number) => {
+    return await prisma.event.update({
+        where: {
+            id: Number(eventId)
+        },
+        data: {
+            isPublished: true
+        }
+    })
+}
+
+// query for update event
+export const updateEventQuery = async (eventId: number, data: IUpdateEventService, uploadedBannerUrl: any, uploadedThumbnailUrl: any) => {
+    console.log(data)
+    return await prisma.event.update({
+        where: {
+            id: Number(eventId)
+        },
+        data: {
+            name: data.name,
+            date: new Date(data.date),
+            startTime: new Date(`${data.date}T${data.startTime}`),
+            endTime: new Date(`${data.date}T${data.endTime}`),
+            description: data.description,
+            termsAndConditions: data.termsAndConditions,
+            locationId: Number(data.locationId),
+            categoryId: Number(data.categoryId),
             bannerUrl: uploadedBannerUrl[0].path,
             thumbnailUrl: uploadedThumbnailUrl[0].path
         }

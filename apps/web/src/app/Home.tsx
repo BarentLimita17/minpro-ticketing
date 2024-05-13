@@ -22,7 +22,6 @@ export default function Home() {
             <div className="mx-[100px] py-[30px]">
                 <div className="card w-[300px] bg-base-100 shadow-xl">
                     <figure>
-                        <img src="https://daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.jpg" alt="Shoes" />
                     </figure>
                     <div className="card-body bg-white">
                         <button className="card-title text-black font-bold text-xl hover:text-[#007bff]">
