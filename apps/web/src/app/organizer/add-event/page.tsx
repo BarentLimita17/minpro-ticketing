@@ -6,6 +6,7 @@ import { useCreateEvent } from '@/hooks/events/useCreateEvent';
 import { CreateLocationModal } from '@/components/AddEvent/CreateLocationModal';
 import { createEventSchema } from '@/schema/CreateEventSchema';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 export default function AddEventsPage() {
     const [selectedBannerFiles, setSelectedBannerFiles]: any = useState([])
@@ -13,6 +14,7 @@ export default function AddEventsPage() {
     const { dataLocation, dataCategory }: any = useGetCategoryAndLocation()
     const [showModal, setShowModal] = useState(false);
     const { mutationCreateEvent } = useCreateEvent()
+    const router = useRouter();
     let createdEventResult: any;
 
     const onSetBannerFiles = (event: any) => {
@@ -105,9 +107,13 @@ export default function AddEventsPage() {
 
                                         createdEventResult = await mutationCreateEvent(fd);
 
+                                        router.push(`/organizer/add-event/${createdEventResult.data.data.id}/add-ticketpromotion`);
+
                                         setSelectedBannerFiles([])
                                         setSelectedThumbnailFiles([])
                                         resetForm();
+
+                                        console.log(createdEventResult.data.data.id)
 
                                     } catch (error) {
                                         console.error('Error during form submission:', error);
@@ -246,9 +252,7 @@ export default function AddEventsPage() {
                                                     </div>
                                                 </div>
                                                 <div className="form-control mt-6">
-                                                    <Link href={`/organizer/add-event/${createdEventResult.id}/add-ticketpromotion`}>
-                                                        <button disabled={!(dirty && isValid)} className="btn btn-primary">Save</button>
-                                                    </Link>
+                                                    <button disabled={!(dirty && isValid)} className="btn btn-primary">Save</button>
                                                 </div>
                                             </Form>
                                         </>

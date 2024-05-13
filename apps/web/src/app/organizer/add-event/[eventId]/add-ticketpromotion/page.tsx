@@ -35,10 +35,6 @@ export default function AddTicketPromotionPage({ params }: any) {
     const [isFreeEvent, setIsFreeEvent] = useState(false);
     const { mutationPublishEvent } = usePublishEvent()
 
-    const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setIsFreeEvent(event.target.checked);
-    };
-
     const handlePublishEvent = () => {
         mutationPublishEvent({ eventId: params.eventId })
     }
@@ -96,7 +92,6 @@ export default function AddTicketPromotionPage({ params }: any) {
                                 {dataEventDetails?.description}
                             </div>
                         </div>
-                        {/* MAP */}
                         <div>
                             <div className="card-body justify-start rounded-xl mx-[20px] hover:text-[20px] hover:mx-0 hover:scale-110 duration-300 bg-[#b5b9c1]">
                                 <div className="text-[15px] text-[#1a56db] font-bold">
@@ -143,50 +138,42 @@ export default function AddTicketPromotionPage({ params }: any) {
                         </Link>
                     </div>
                     {/* DIV ADD TICKET AND PROMOTION */}
-                    {isFreeEvent ? null : (
-                        <div className="flex flex-col h-auto mt-[30px]">
-                            {/* DIV FREE EVENTS CHECKBOX */}
-                            <div className="form-control">
-                                <label className="label cursor-pointer justify-start gap-3">
-                                    <span className="text-black font-bold text-[20px]">Free Events</span>
-                                    <input type="checkbox" className="checkbox checkbox-primary" />
-                                </label>
-                            </div>
-                            {/* DIV TABS ADD TICKET AND PROMOTION */}
-                            <div className="overflow-x-auto ">
-                                <Tabs aria-label="Full width tabs" className="shadow-xl" style="fullWidth">
-                                    <Tabs.Item title="Tambah Tiket" active icon={IoTicket}>
-                                        <CreateTicketModal eventId={params.eventId} visible={showTicketModal} onClose={() => setShowTicketModal(false)} />
-                                        <div className="flex justify-center mt-[10px] text-black font-bold">
-                                            ADD YOUR TICKET
+                    <div className="flex flex-col h-auto mt-[30px]">
+                        {/* DIV FREE EVENTS CHECKBOX */}
+                        {/* DIV TABS ADD TICKET AND PROMOTION */}
+                        <div className="overflow-x-auto ">
+                            <Tabs aria-label="Full width tabs" className="shadow-xl" style="fullWidth">
+                                <Tabs.Item title="Tambah Tiket" active icon={IoTicket}>
+                                    <CreateTicketModal eventId={params.eventId} visible={showTicketModal} onClose={() => setShowTicketModal(false)} />
+                                    <div className="flex justify-center mt-[10px] text-black font-bold">
+                                        ADD YOUR TICKET
+                                    </div>
+                                    {dataEventDetails?.eventTicket?.map((ticket: any) => (
+                                        <CreatedTicketCard key={ticket.id} id={ticket.id} name={ticket.name} description={ticket.description} price={ticket.price.toLocaleString("id-ID", { style: "currency", currency: "IDR" })} quantity={ticket.quantity} validityDate={ticket.validityDate} />
+                                    ))}
+                                    <div className="flex flex-col gap-3">
+                                        <div onClick={() => setShowTicketModal(true)} className="btn btn-success mt-[15px] bg-gray-300 hover:bg-gray-600 text-white flex justify-center h-[150px] font-bold">
+                                            ADD MORE TICKET +
                                         </div>
-                                        {dataEventDetails?.eventTicket?.map((ticket: any) => (
-                                            <CreatedTicketCard key={ticket.id} id={ticket.id} name={ticket.name} description={ticket.description} price={ticket.price.toLocaleString("id-ID", { style: "currency", currency: "IDR" })} quantity={ticket.quantity} validityDate={ticket.validityDate} />
-                                        ))}
-                                        <div className="flex flex-col gap-3">
-                                            <div onClick={() => setShowTicketModal(true)} className="btn btn-success mt-[15px] bg-gray-300 hover:bg-gray-600 text-white flex justify-center h-[150px] font-bold">
-                                                ADD MORE TICKET +
-                                            </div>
+                                    </div>
+                                </Tabs.Item>
+                                <Tabs.Item title="Tambah Promosi" icon={CiDiscount1}>
+                                    <CreatePromotionModal eventId={params.eventId} visible={showPromotionModal} onClose={() => setShowPromotionModal(false)} />
+                                    <div className="flex justify-center mt-[10px] text-black font-bold">
+                                        ADD YOUR PROMOTION
+                                    </div>
+                                    {dataEventDetails?.promotion?.map((promotion: any) => (
+                                        <CreatePromotionCard key={promotion.id} id={promotion.id} name={promotion.name} code={promotion.code} quantity={promotion.quantity} description={promotion.description} discount={promotion.discount} validityDate={promotion.validityDate} />
+                                    ))}
+                                    <div className="flex flex-col gap-3">
+                                        <div onClick={() => setShowPromotionModal(true)} className="btn btn-success mt-[15px] bg-gray-300 hover:bg-gray-600 text-white flex justify-center h-[150px] font-bold">
+                                            ADD MORE PROMOTION +
                                         </div>
-                                    </Tabs.Item>
-                                    <Tabs.Item title="Tambah Promosi" icon={CiDiscount1}>
-                                        <CreatePromotionModal eventId={params.eventId} visible={showPromotionModal} onClose={() => setShowPromotionModal(false)} />
-                                        <div className="flex justify-center mt-[10px] text-black font-bold">
-                                            ADD YOUR PROMOTION
-                                        </div>
-                                        {dataEventDetails?.promotion?.map((promotion: any) => (
-                                            <CreatePromotionCard key={promotion.id} id={promotion.id} name={promotion.name} code={promotion.code} quantity={promotion.quantity} description={promotion.description} discount={promotion.discount} validityDate={promotion.validityDate} />
-                                        ))}
-                                        <div className="flex flex-col gap-3">
-                                            <div onClick={() => setShowPromotionModal(true)} className="btn btn-success mt-[15px] bg-gray-300 hover:bg-gray-600 text-white flex justify-center h-[150px] font-bold">
-                                                ADD MORE PROMOTION +
-                                            </div>
-                                        </div>
-                                    </Tabs.Item>
-                                </Tabs>
-                            </div>
+                                    </div>
+                                </Tabs.Item>
+                            </Tabs>
                         </div>
-                    )}
+                    </div>
                 </div>
             </div >
         </div >
