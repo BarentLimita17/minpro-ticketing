@@ -47,43 +47,43 @@ const dataRole = [
 
 const dataUser = [
     {
-        email: "barent@gmail.com",
-        fullname: "Barent Limita",
-        password: "barent",
-        code: "barent170102",
+        email: "Customer@gmail.com",
+        fullname: "Customer",
+        password: "customer",
+        code: "customer12345",
         roleId: 1
     }
 ]
 
 async function main() {
 
-    for (let item of dataRole) {
-        await prisma.role.create({
-            data: item
-        })
-        console.log(`Created role: ${item.name}`)
-    }
+    // for (let item of dataRole) {
+    //     await prisma.role.create({
+    //         data: item
+    //     })
+    //     console.log(`Created role: ${item.name}`)
+    // }
 
     for (let item of dataUser) {
         await prisma.user.create({
             data: item
         })
-        console.log(`Created user: ${item.email}`)
+        // console.log(`Created user: ${item.email}`)
     }
-    for (let item of dataCategory) {
-        await prisma.category.create({
-            data: item
-        })
-        console.log(`Created category: ${item.name}`)
-    }
+    // for (let item of dataCategory) {
+    //     await prisma.category.create({
+    //         data: item
+    //     })
+    //     console.log(`Created category: ${item.name}`)
+    // }
 
-    for (let item of dataLocation) {
-        await prisma.location.create({
-            data: item
-        })
-        console.log(`Created location: ${item.name}`)
-    }
-    process.exit(0)
+    // for (let item of dataLocation) {
+    //     await prisma.location.create({
+    //         data: item
+    //     })
+    //     console.log(`Created location: ${item.name}`)
+    // }
+    // process.exit(0)
 }
 
 main().catch(error => {

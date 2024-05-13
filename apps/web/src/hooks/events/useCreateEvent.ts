@@ -2,7 +2,7 @@ import { toast } from "react-toastify"
 import { useCreateEventMutation } from "@/api/useCreateEventMutation"
 
 export const useCreateEvent = () => {
-    const { mutate: mutationCreateEvent } = useCreateEventMutation({
+    const { mutateAsync: mutationCreateEvent } = useCreateEventMutation({
         onSuccess: () => {
             toast.success("Event Has Been Saved")
         },
@@ -12,6 +12,7 @@ export const useCreateEvent = () => {
         }
     })
 
+    // console.log(mutationCreateEvent)
     return {
         mutationCreateEvent
     }

@@ -32,6 +32,7 @@ model Event {
   location    Location      @relation(fields: [locationId], references: [id])
   Category    Category?     @relation(fields: [categoryId], references: [id])
   User        User?         @relation(fields: [userUid], references: [uid])
+  UserTicket  UserTicket[]
 }
 
 model EventTicket {
@@ -46,7 +47,54 @@ model EventTicket {
   deletedAt    DateTime?
   eventId      Int
 
-  event Event @relation(fields: [eventId], references: [id])
+  event             Event               @relation(fields: [eventId], references: [id])
+  UserTicket        UserTicket[]
+  TransactionDetail TransactionDetail[]
+}
+
+model UserTicket {
+  id            Int       @id @default(autoincrement())
+  userUid       String
+  eventId       Int
+  eventTicketId Int
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  deletedAt     DateTime?
+
+  EventTicket EventTicket @relation(fields: [eventTicketId], references: [id])
+  User        User        @relation(fields: [userUid], references: [uid])
+  Event       Event       @relation(fields: [eventId], references: [id])
+  Promotion   Promotion?  @relation(fields: [promotionId], references: [id])
+  promotionId Int?
+}
+
+model Transaction {
+  id          Int       @id @default(autoincrement())
+  userUid     String
+  totalAmount Int // total amount dari semua transaction details
+  promotionId Int?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  deletedAt   DateTime?
+
+  promotion         Promotion?          @relation(fields: [promotionId], references: [id])
+  User              User                @relation(fields: [userUid], references: [uid])
+  TransactionDetail TransactionDetail[]
+}
+
+model TransactionDetail {
+  id            Int       @id @default(autoincrement())
+  quantity      Int
+  price         Int
+  totalAmount   Int
+  transactionId Int
+  eventTicketId Int
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  deletedAt     DateTime?
+
+  transaction Transaction @relation(fields: [transactionId], references: [id])
+  eventTicket EventTicket @relation(fields: [eventTicketId], references: [id])
 }
 
 model Promotion {
@@ -62,7 +110,9 @@ model Promotion {
   deletedAt    DateTime?
   eventId      Int
 
-  Event Event @relation(fields: [eventId], references: [id])
+  Event       Event         @relation(fields: [eventId], references: [id])
+  UserTicket  UserTicket[]
+  Transaction Transaction[]
 }
 
 model Category {
@@ -119,9 +169,11 @@ model User {
   updatedAt     DateTime  @updatedAt
   deletedAt     DateTime?
 
-  event  Event[]
-  review Review[]
-  role   Role     @relation(fields: [roleId], references: [id])
+  event       Event[]
+  review      Review[]
+  role        Role          @relation(fields: [roleId], references: [id])
+  Transaction Transaction[]
+  UserTicket  UserTicket[]
 }
 
 model Role {
