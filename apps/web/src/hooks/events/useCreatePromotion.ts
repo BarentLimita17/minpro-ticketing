@@ -6,9 +6,9 @@ export const useCreatePromotion = () => {
         onSuccess: () => {
             toast.success("Promotion created successfully")
         },
-        onError: (error) => {
+        onError: (error: any) => {
             console.log(error)
-            toast.error(error.message)
+            toast.error(error.response?.data.message)
         }
     })
 

@@ -3,6 +3,7 @@ import { CiMenuBurger } from "react-icons/ci";
 import Link from "next/link";
 import Image from "next/image";
 import { FaCalendarPlus } from "react-icons/fa";
+import { CgProfile } from "react-icons/cg";
 
 export default function NavbarMobile() {
     return (
@@ -41,6 +42,11 @@ export default function NavbarMobile() {
                             <button className="bg-blue-500 w-[19%] hover:bg-blue-700 text-white font-bold py-2 px-4 border border-[#319cff] rounded duration-300">
                                 Masuk
                             </button>
+                            <Link className="flex items-center" href={"/user"}>
+                                <button>
+                                    <CgProfile className="text-white hover:scale-150 duration-300" size={20} />
+                                </button>
+                            </Link>
                         </div>
                     </li>
                 </ul>

@@ -13,7 +13,7 @@ export default function EventsPage() {
     const [categoryName, setCategoryName] = useState('');
     const [debouncedeventName] = useDebounce(eventName, 1000);
     const [debouncedLocation] = useDebounce(location, 1000);
-    const [debouncedcategoryName] = useDebounce(categoryName, 0);
+    const [debouncedcategoryName] = useDebounce(categoryName, 1000);
     const { dataAllActiveEvents } = useGetAllActiveEvents(debouncedLocation, debouncedeventName, debouncedcategoryName)
     const [isDebouncing, setIsDebouncing] = useState(false);
     let eventDate: Date

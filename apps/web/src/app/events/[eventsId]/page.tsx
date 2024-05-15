@@ -1,14 +1,19 @@
 'use client';
+import { useState } from "react";
 import { useGetEventDetails } from "@/hooks/events/useGetEventDetails";
 import { IoLocationSharp, IoCalendar } from "react-icons/io5";
 import { FaClock } from "react-icons/fa";
 import Image from "next/image";
 import Map from "@/components/Map";
 import TicketCard from "@/components/EventDetails/TicketCard";
+import { useCreateTransaction } from "@/hooks/transactions/useCreateTransaction";
 
 export default function EventDetails({ params }: any) {
-    const { dataEventDetails } = useGetEventDetails(params.eventsId)
+    const { dataEventDetails, refetchEventDetails } = useGetEventDetails(params.eventsId)
+    const { mutationCreateTransaction } = useCreateTransaction()
 
+    const [ticketArray, setTicketArray] = useState([])
+    const [promotionCode, setPromotionCode] = useState('');
 
     const eventDate = new Date(dataEventDetails?.date);
     const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
@@ -18,6 +23,18 @@ export default function EventDetails({ params }: any) {
     const hours = ('0' + date.getHours()).slice(-2);
     const minutes = ('0' + date.getMinutes()).slice(-2);
     const formattedTime = `${hours}:${minutes} WIB`;
+
+    let eventTicketArray: { eventTicketId: string, quantity: number }[] = [];
+    ticketArray.forEach((ticketId: string) => {
+        let found = eventTicketArray.find((ticket: any) => ticket.id === ticketId);
+        if (found) {
+            found.quantity += 1;
+        } else {
+            eventTicketArray.push({ eventTicketId: ticketId, quantity: 1 });
+        }
+    })
+
+    if (dataEventDetails === undefined) return (<div>Loading</div>);
 
     return (
         <div className='bg-[#fbfbfb] h-auto pt-[5%]'>
@@ -88,6 +105,13 @@ export default function EventDetails({ params }: any) {
                             </div>
                         </div>
                     </div>
+                    {/* DIV ENTER PROMOTION CODE */}
+                    <div className="card flex flex-none shadow-2xl text-center justify-center items-center gap-3 mb-3">
+                        <div className="text-[16px] mt-[12px] text-black font-bold">
+                            ENTER PROMOTION CODE
+                        </div>
+                        <input name="promotionCode" value={promotionCode} onChange={(e) => setPromotionCode(e.target.value)} className="flex bg-gray-200 mb-[16px] p-[6px] justify-center w-[90%] rounded-xl text-black font-bold italic" placeholder="Enter Code here" />
+                    </div>
                     {/* DIV TIKET */}
                     <div className="card flex flex-none shadow-2xl">
                         <div className="card-body rounded-xl bg-white flex-none">
@@ -96,12 +120,28 @@ export default function EventDetails({ params }: any) {
                             </div>
                             <hr className="text-black" />
                             {dataEventDetails?.eventTicket?.map((ticket: any) => (
-                                <TicketCard key={ticket.id} name={ticket.name} description={ticket.description} price={ticket.price.toLocaleString("id-ID", { style: "currency", currency: "IDR" })} quantity={ticket.quantity} validityDate={ticket.validityDate} />
+                                <TicketCard key={ticket.id} ticket={ticketArray} setTicket={setTicketArray} ticketId={ticket.id} name={ticket.name} description={ticket.description} price={ticket.price.toLocaleString("id-ID", { style: "currency", currency: "IDR" })} quantity={ticket.quantity} validityDate={ticket.validityDate} />
                             ))}
                         </div>
                     </div>
+                    <div className="flex justify-center items-center mt-[16px]">
+                        <button
+                            onClick={async () => {
+                                mutationCreateTransaction({
+                                    userUid: 'clw3rc2u700011163aislktlf',
+                                    eventId: params.eventsId,
+                                    eventTicket: eventTicketArray,
+                                    promotionCode: promotionCode
+                                })
+                                await refetchEventDetails()
+                            }}
+                            className="w-[90%] h-[40px] bg-[#007bff] text-white py-2 px-4 rounded-lg hover:bg-[#0056b3]"
+                            disabled={eventTicketArray.length === 0}>
+                            Buy Now
+                        </button>
+                    </div>
                 </div>
             </div>
-        </div>
+        </div >
     )
 }

@@ -7,7 +7,8 @@ export const getAllActiveEventsQuery = async (city?: string, eventName?: string,
     let queryFilters: Prisma.EventWhereInput = {
         date: {
             gte: new Date(Date.now())
-        }
+        },
+        isPublished: true
     };
 
     if (city) {
@@ -52,7 +53,8 @@ export const getAllPastEventsQuery = async () => {
         where: {
             date: {
                 lt: new Date(Date.now())
-            }
+            },
+            isPublished: true
         },
         include: {
             location: true,
@@ -69,7 +71,8 @@ export const getAllClosestEventsQuery = async () => {
             date: {
                 gte: new Date(Date.now()),
                 lt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
-            }
+            },
+            isPublished: true
         },
         include: {
             location: true,

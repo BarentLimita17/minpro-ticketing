@@ -32,7 +32,6 @@ export default function AddTicketPromotionPage({ params }: any) {
     const { dataEventDetails } = useGetEventDetails(params.eventId)
     const [showTicketModal, setShowTicketModal] = useState(false);
     const [showPromotionModal, setShowPromotionModal] = useState(false);
-    const [isFreeEvent, setIsFreeEvent] = useState(false);
     const { mutationPublishEvent } = usePublishEvent()
 
     const handlePublishEvent = () => {

@@ -6,8 +6,8 @@ export const useUpdatePromotion = () => {
         onSuccess: () => {
             toast.success("Promotion updated successfully")
         },
-        onError: (error) => {
-            toast.error("Failed to update promotion")
+        onError: (error: any) => {
+            toast.error(error.response?.data.message)
         }
     })
 
