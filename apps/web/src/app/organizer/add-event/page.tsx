@@ -5,7 +5,6 @@ import { useGetCategoryAndLocation } from '@/hooks/events/useGetCategoryAndLocat
 import { useCreateEvent } from '@/hooks/events/useCreateEvent';
 import { CreateLocationModal } from '@/components/AddEvent/CreateLocationModal';
 import { createEventSchema } from '@/schema/CreateEventSchema';
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
 export default function AddEventsPage() {
@@ -112,8 +111,6 @@ export default function AddEventsPage() {
                                         setSelectedBannerFiles([])
                                         setSelectedThumbnailFiles([])
                                         resetForm();
-
-                                        console.log(createdEventResult.data.data.id)
 
                                     } catch (error) {
                                         console.error('Error during form submission:', error);

@@ -6,6 +6,7 @@ import { useUpdateEvent } from '@/hooks/events/useUpdateEvent';
 import { useGetCategoryAndLocation } from '@/hooks/events/useGetCategoryAndLocation';
 import { CreateLocationModal } from '@/components/AddEvent/CreateLocationModal';
 import { useGetEventDetails } from "@/hooks/events/useGetEventDetails";
+import { useRouter } from 'next/navigation';
 
 export default function UpdateEventPage({ params }: any) {
     const [selectedBannerFiles, setSelectedBannerFiles]: any = useState([])
@@ -14,6 +15,8 @@ export default function UpdateEventPage({ params }: any) {
     const [showModal, setShowModal] = useState(false);
     const { dataEventDetails } = useGetEventDetails(params.eventId)
     const { mutationUpdateEvent } = useUpdateEvent()
+    const router = useRouter();
+    let updatedEventResult: any;
 
     const onSetBannerFiles = (event: any) => {
         try {
@@ -104,10 +107,12 @@ export default function UpdateEventPage({ params }: any) {
                                             fd.append('bannerurl', selectedBannerFiles[0]);
                                             fd.append('thumbnailurl', selectedThumbnaillFiles[0]);
 
-                                            await mutationUpdateEvent({
+                                            updatedEventResult = await mutationUpdateEvent({
                                                 eventId: params.eventId,
                                                 data: fd
                                             });
+
+                                            router.push(`/organizer/add-event/${updatedEventResult.data.data.id}/add-ticketpromotion`);
 
                                             setSelectedBannerFiles([])
                                             setSelectedThumbnailFiles([])

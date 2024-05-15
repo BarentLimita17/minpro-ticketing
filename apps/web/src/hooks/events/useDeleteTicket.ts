@@ -6,8 +6,8 @@ export const useDeleteTicket = () => {
         onSuccess: () => {
             toast.success("Ticket deleted successfully")
         },
-        onError: (error) => {
-            toast.error("Failed to delete ticket")
+        onError: (error: any) => {
+            toast.error(error.response?.data.message)
         }
     })
 

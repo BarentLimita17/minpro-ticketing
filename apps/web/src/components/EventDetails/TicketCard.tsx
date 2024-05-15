@@ -1,21 +1,29 @@
+'use client'
+import { useState } from "react";
 import React from "react";
 import { ITicketCard } from "./types";
 import { useReducer } from "react";
 import CounterReducer from "@/reducer/CounterReducer";
 import { CiSquarePlus, CiSquareMinus } from "react-icons/ci";
 
-export default function TicketCard({ name, description, price, quantity, validityDate }: ITicketCard) {
+export default function TicketCard({ ticketId, name, description, price, quantity, validityDate, ticket, setTicket }: ITicketCard) {
     const validUntil = new Date(validityDate)
     const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
     let formattedDate = `${validUntil.getDate()} ${months[validUntil.getMonth()]} ${validUntil.getFullYear()}`
     const [state, dispatch] = useReducer(CounterReducer, { counter: 0 })
 
-    const handleIncrement = () => {
+    const handleIncrement: any = (ticketId: string) => {
         dispatch({ type: "increment" })
+        setTicket([...ticket, ticketId])
     }
 
-    const handleDecrement = () => {
+    const handleDecrement: any = () => {
         dispatch({ type: "decrement" })
+        let index = ticket.indexOf(ticketId)
+        if (index !== -1) {
+            ticket.splice(index, 1);
+        }
+        setTicket(ticket)
     }
     return (
         <div className="flex flex-col" >
@@ -38,7 +46,9 @@ export default function TicketCard({ name, description, price, quantity, validit
                         <div className="flex justify-around items-center">
                             <button className="text-black" disabled={state.counter === 0} onClick={handleDecrement}><CiSquareMinus size={40} /></button>
                             <div className="text-black font-bold">  {state.counter}</div>
-                            <button className="text-black" disabled={state.counter === quantity} onClick={handleIncrement}><CiSquarePlus size={40} /></button>
+                            <button className="text-black" disabled={state.counter === quantity} onClick={() => {
+                                handleIncrement(ticketId)
+                            }}><CiSquarePlus size={40} /></button>
                         </div>
                     </div>
                 </div>

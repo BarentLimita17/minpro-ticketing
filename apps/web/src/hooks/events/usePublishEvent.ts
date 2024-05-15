@@ -6,9 +6,9 @@ export const usePublishEvent = () => {
         onSuccess: () => {
             toast.success("Event Has Been Published")
         },
-        onError: (error) => {
+        onError: (error: any) => {
             console.log(error)
-            toast.error("Event failed to publish")
+            toast.error(error.response?.data.message)
         }
     })
 

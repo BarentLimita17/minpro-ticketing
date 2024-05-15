@@ -6,8 +6,8 @@ export const useDeletePromotion = () => {
         onSuccess: () => {
             toast.success("Promotion deleted successfully")
         },
-        onError: (error) => {
-            toast.error("Failed to delete promotion")
+        onError: (error: any) => {
+            toast.error(error.response?.data.message)
         }
     })
 

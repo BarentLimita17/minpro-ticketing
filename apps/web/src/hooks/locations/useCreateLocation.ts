@@ -6,8 +6,8 @@ export const useCreateLocation = () => {
         onSuccess: (data: string) => {
             toast.success("Location Created");
         },
-        onError: (error: Error) => {
-            toast.error("Failed to Create Location")
+        onError: (error: any) => {
+            toast.error(error.response?.data.message);
         }
     })
 

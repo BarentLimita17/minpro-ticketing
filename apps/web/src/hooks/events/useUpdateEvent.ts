@@ -2,13 +2,13 @@ import { toast } from "react-toastify"
 import { useUpdateEventMutation } from "@/api/useUpdateEventMutation"
 
 export const useUpdateEvent = () => {
-    const { mutate: mutationUpdateEvent } = useUpdateEventMutation({
+    const { mutateAsync: mutationUpdateEvent } = useUpdateEventMutation({
         onSuccess: () => {
             toast.success("Event Has Been Updated")
         },
-        onError: (error) => {
+        onError: (error: any) => {
             console.log(error)
-            toast.error("Event failed to update")
+            toast.error(error.response?.data.message)
         }
     })
 

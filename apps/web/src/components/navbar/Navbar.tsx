@@ -2,6 +2,7 @@
 import Image from "next/image";
 import Link from 'next/link';
 import { FaCalendarPlus } from "react-icons/fa";
+import { CgProfile } from "react-icons/cg";
 
 export default function Navbar() {
   return (
@@ -37,6 +38,11 @@ export default function Navbar() {
         <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 border border-[#319cff] rounded duration-300">
           Masuk
         </button>
+        <Link className="flex items-center" href={"/user"}>
+          <button>
+            <CgProfile className="text-white hover:scale-150 duration-300" size={20} />
+          </button>
+        </Link>
       </div>
     </div>
   )

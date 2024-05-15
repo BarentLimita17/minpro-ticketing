@@ -6,8 +6,8 @@ export const useUpdateTicket = () => {
         onSuccess: () => {
             toast.success("Ticket updated successfully")
         },
-        onError: (error) => {
-            toast.error("Failed to update ticket")
+        onError: (error: any) => {
+            toast.error(error.response?.data.message)
         }
     })
 
