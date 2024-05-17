@@ -6,7 +6,7 @@ export const useCreateTransactionMutation = ({ onSuccess, onError }: { onSuccess
     const { mutateAsync } = useMutation({
         mutationFn: async ({ userUid, eventId, eventTicket, promotionCode }: { userUid: string, eventId: number, eventTicket: any, promotionCode: string }) => {
             const createTransactionResponse = await axios.post('http://localhost:8000/transaction', { userUid, eventId, eventTicket, promotionCode })
-            return createTransactionResponse
+            return { createTransactionResponse, eventId }
         },
         onSuccess,
         onError

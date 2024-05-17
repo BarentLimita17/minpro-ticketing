@@ -5,17 +5,21 @@ import { useGetCategoryAndLocation } from '@/hooks/events/useGetCategoryAndLocat
 import { useGetAllActiveEvents } from "@/hooks/events/useGetAllActiveEvents";
 import { useDebounce } from 'use-debounce';
 import Link from "next/link";
+import Image from "next/image";
+import { Pagination } from "antd";
 
 export default function EventsPage() {
     const { dataCategory }: any = useGetCategoryAndLocation()
     const [eventName, seteventName] = useState('');
     const [location, setLocation] = useState('');
     const [categoryName, setCategoryName] = useState('');
+    const [page, setPage] = useState(1);
     const [debouncedeventName] = useDebounce(eventName, 1000);
     const [debouncedLocation] = useDebounce(location, 1000);
     const [debouncedcategoryName] = useDebounce(categoryName, 1000);
-    const { dataAllActiveEvents } = useGetAllActiveEvents(debouncedLocation, debouncedeventName, debouncedcategoryName)
+    const { dataAllActiveEvents, refetchAllActiveEvents } = useGetAllActiveEvents(debouncedLocation, debouncedeventName, debouncedcategoryName, page);
     const [isDebouncing, setIsDebouncing] = useState(false);
+
     let eventDate: Date
     let months: string[]
     let formattedDate: string;
@@ -26,7 +30,8 @@ export default function EventsPage() {
             setIsDebouncing(false);
         }, 2000);
         return () => clearTimeout(timeout);
-    }, [debouncedeventName, debouncedLocation, debouncedcategoryName]);
+    }, [debouncedeventName, debouncedLocation, debouncedcategoryName, page]);
+
 
     if (dataCategory === undefined) return <div>Loading...</div>
 
@@ -81,19 +86,32 @@ export default function EventsPage() {
                             <div>Finding Your Music...</div>
                         </div>
                     ) : (
-                        dataAllActiveEvents?.map((event: any) => {
-                            eventDate = new Date(event.date)
-                            months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
-                            formattedDate = `${eventDate.getDate()} ${months[eventDate.getMonth()]} ${eventDate.getFullYear()}`
-                            return (
-                                <Link key={event.id} href={`/events/${event.id}`}>
-                                    <EventsCard name={event.name} banner={event.bannerUrl} date={formattedDate} location={event.location.name} price={event.eventTicket.length == 0 ? "Free" : (event.eventTicket[0].price).toLocaleString("id-ID", { style: "currency", currency: "IDR" })} />
-                                </Link>
-                            )
-                        })
+                        dataAllActiveEvents?.data?.length === 0 ? (
+                            <div className="flex flex-col items-start justify-center ml-[130px] bg-[#fbfbfb] mt-0 mb-[50px] lg:ml-[400px] lg:mb-0 lg:mt-[80px]">
+                                <Image className="rounded-full" src="/NOT-FOUND.jpeg" alt="No events found" width={300} height={300} />
+                            </div>
+                        ) : (
+                            dataAllActiveEvents?.data?.map((event: any) => {
+                                eventDate = new Date(event.date);
+                                months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+                                formattedDate = `${eventDate.getDate()} ${months[eventDate.getMonth()]} ${eventDate.getFullYear()}`;
+                                return (
+                                    <Link key={event.id} href={`/events/${event.id}`}>
+                                        <EventsCard
+                                            name={event.name}
+                                            banner={event.bannerUrl}
+                                            date={formattedDate}
+                                            location={event.location.name}
+                                            price={event.eventTicket.length === 0 ? "Free" : (event.eventTicket[0].price).toLocaleString("id-ID", { style: "currency", currency: "IDR" })}
+                                        />
+                                    </Link>
+                                );
+                            })
+                        )
                     )}
                 </div>
             </div>
+            <Pagination className="flex justify-center pb-[10px]" current={page} pageSize={6} total={dataAllActiveEvents?.count} onChange={(page) => setPage(page)}></Pagination>
         </div>
     )
 }

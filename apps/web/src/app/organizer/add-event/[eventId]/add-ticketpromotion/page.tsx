@@ -7,7 +7,7 @@ import { IoTicket } from "react-icons/io5";
 import { CiDiscount1 } from "react-icons/ci";
 import { CreateTicketModal } from "@/components/AddEvent/CreateTicketModal";
 import { CreatePromotionModal } from "@/components/AddEvent/CreatePromotionModal";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import CreatedTicketCard from "@/components/AddEvent/CreatedTicketCard";
 import CreatePromotionCard from "@/components/AddEvent/CreatePromotionCard";
 import { usePublishEvent } from "@/hooks/events/usePublishEvent";
@@ -29,7 +29,7 @@ const formatTime = (timeString: string | undefined) => {
 }
 
 export default function AddTicketPromotionPage({ params }: any) {
-    const { dataEventDetails } = useGetEventDetails(params.eventId)
+    const { dataEventDetails, refetchEventDetails } = useGetEventDetails(params.eventId)
     const [showTicketModal, setShowTicketModal] = useState(false);
     const [showPromotionModal, setShowPromotionModal] = useState(false);
     const { mutationPublishEvent } = usePublishEvent()
@@ -40,9 +40,9 @@ export default function AddTicketPromotionPage({ params }: any) {
 
     return (
         <div className="bg-[#fbfbfb] h-auto pt-[5%]">
-            <div className="flex py-[30px] lg:mx-[200px] gap-[30px]">
+            <div className="flex flex-wrap lg:flex-nowrap py-[30px] mx-[2px] lg:mx-[200px] justify-center gap-2 lg:gap-[30px]">
                 {/* DIV KIRI */}
-                <div className="flex flex-col mt-[30px] w-[60%]">
+                <div className="flex flex-col mt-[30px] lg:w-[60%] w-[90%]">
                     {/* BANNER OVERVIEW */}
                     <div className="flex justify-center">
                         <Image src={`http://localhost:8000/${dataEventDetails?.bannerUrl}`} className="rounded-3xl" alt="Event Banner" width={600} height={400} />
@@ -119,7 +119,7 @@ export default function AddTicketPromotionPage({ params }: any) {
                     </div>
                 </div>
                 {/* RIGHT SECTION */}
-                <div className="flex flex-col mt-[30px] w-[40%]">
+                <div className="flex flex-col mt-[30px] lg:w-[40%] w-[90%]">
                     {/* DIV ACTIONS */}
                     <div className="flex flex-col h-[243px]">
                         <div className="text-lg font-bold w-full mb-2 text-center text-black">
@@ -138,7 +138,6 @@ export default function AddTicketPromotionPage({ params }: any) {
                     </div>
                     {/* DIV ADD TICKET AND PROMOTION */}
                     <div className="flex flex-col h-auto mt-[30px]">
-                        {/* DIV FREE EVENTS CHECKBOX */}
                         {/* DIV TABS ADD TICKET AND PROMOTION */}
                         <div className="overflow-x-auto ">
                             <Tabs aria-label="Full width tabs" className="shadow-xl" style="fullWidth">
@@ -148,7 +147,7 @@ export default function AddTicketPromotionPage({ params }: any) {
                                         ADD YOUR TICKET
                                     </div>
                                     {dataEventDetails?.eventTicket?.map((ticket: any) => (
-                                        <CreatedTicketCard key={ticket.id} id={ticket.id} name={ticket.name} description={ticket.description} price={ticket.price.toLocaleString("id-ID", { style: "currency", currency: "IDR" })} quantity={ticket.quantity} validityDate={ticket.validityDate} />
+                                        <CreatedTicketCard key={ticket.id} refetchEventDetails={refetchEventDetails} id={ticket.id} name={ticket.name} description={ticket.description} price={ticket.price.toLocaleString("id-ID", { style: "currency", currency: "IDR" })} quantity={ticket.quantity} validityDate={ticket.validityDate} />
                                     ))}
                                     <div className="flex flex-col gap-3">
                                         <div onClick={() => setShowTicketModal(true)} className="btn btn-success mt-[15px] bg-gray-300 hover:bg-gray-600 text-white flex justify-center h-[150px] font-bold">

@@ -3,21 +3,17 @@ import { useState } from "react";
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { createPromotionSchema } from "@/schema/CreatePromotionSchema";
 import { useGetPromotionDetails } from "@/hooks/events/useGetPromotionDetails";
-import { useGetEventDetails } from '@/hooks/events/useGetEventDetails';
 import { useUpdatePromotion } from '@/hooks/events/useUpdatePromotion';
 import { IUpdatePromotionModal } from './types';
 
 export const UpdatePromotionModal = ({ visible, onClose, promotionId }: IUpdatePromotionModal) => {
     const [isLoading, setIsLoading] = useState(false)
-    const { dataPromotionDetails, refetchPromotionDetails } = useGetPromotionDetails(promotionId)
-    const { refetchEventDetails } = useGetEventDetails(dataPromotionDetails?.eventId)
-    const { mutationUpdatePromotion } = useUpdatePromotion();
+    const { dataPromotionDetails } = useGetPromotionDetails(promotionId)
+    const { mutationUpdatePromotion } = useUpdatePromotion(dataPromotionDetails?.eventId as number, promotionId as number);
     if (!visible) return null;
 
     const handleOnClose = (e: any) => {
         if (e.target.id === "container") onClose();
-        refetchEventDetails()
-        refetchPromotionDetails()
     };
 
     return (
@@ -56,10 +52,7 @@ export const UpdatePromotionModal = ({ visible, onClose, promotionId }: IUpdateP
                                 {
                                     onSuccess: () => {
                                         setIsLoading(false)
-                                        refetchPromotionDetails()
-                                        refetchEventDetails()
                                         resetForm()
-                                        window.location.reload()
                                     },
                                     onError: () => {
                                         setIsLoading(false)

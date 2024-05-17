@@ -3,21 +3,17 @@ import { useState } from "react";
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { createTicketSchema } from "@/schema/CreateTicketSchema";
 import { useGetTicketDetails } from '@/hooks/events/useGetTicketDetails';
-import { useGetEventDetails } from '@/hooks/events/useGetEventDetails';
 import { useUpdateTicket } from '@/hooks/events/useUpdateTicket';
 import { IUpdateTicketModal } from './types';
 
-export const UpdateTicketModal = ({ visible, onClose, ticketId }: IUpdateTicketModal) => {
+export const UpdateTicketModal = ({ visible, onClose, ticketId, refetchEventDetails }: IUpdateTicketModal) => {
     const [isLoading, setIsLoading] = useState(false)
-    const { dataTicketDetails, refetchTicketDetails } = useGetTicketDetails(ticketId)
-    const { refetchEventDetails } = useGetEventDetails(dataTicketDetails?.eventId)
-    const { mutationUpdateTicket } = useUpdateTicket();
+    const { dataTicketDetails } = useGetTicketDetails(ticketId)
+    const { mutationUpdateTicket } = useUpdateTicket(refetchEventDetails);
     if (!visible) return null;
 
     const handleOnClose = (e: any) => {
         if (e.target.id === "container") onClose();
-        refetchEventDetails()
-        refetchTicketDetails()
     };
 
     return (
@@ -54,10 +50,7 @@ export const UpdateTicketModal = ({ visible, onClose, ticketId }: IUpdateTicketM
                                 {
                                     onSuccess: () => {
                                         setIsLoading(false)
-                                        refetchTicketDetails()
-                                        refetchEventDetails()
                                         resetForm()
-                                        window.location.reload()
                                     },
                                     onError: () => {
                                         setIsLoading(false)

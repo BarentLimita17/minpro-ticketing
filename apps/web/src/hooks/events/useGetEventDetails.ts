@@ -1,8 +1,9 @@
+'use client'
 import { useGetEventDetailsQuery } from "@/api/useGetEventDetailsQuery";
+import { useEffect } from "react";
 
 export const useGetEventDetails = (eventId: number) => {
-    const { eventDetails } = useGetEventDetailsQuery(eventId);
-    const { refetchEventDetails } = useGetEventDetailsQuery(eventId);
+    const { eventDetails, refetchEventDetails } = useGetEventDetailsQuery(eventId);
 
     return {
         dataEventDetails: eventDetails?.data?.data,
