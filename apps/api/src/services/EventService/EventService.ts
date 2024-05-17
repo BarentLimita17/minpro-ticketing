@@ -3,7 +3,7 @@ import { prisma } from "@/connection";
 import { Prisma } from '@prisma/client';
 
 // query for get all events by city and event name
-export const getAllActiveEventsQuery = async (city?: string, eventName?: string, categoryId?: string) => {
+export const getAllActiveEventsQuery = async (city?: string, eventName?: string, categoryId?: string, page?: any) => {
     let queryFilters: Prisma.EventWhereInput = {
         date: {
             gte: new Date(Date.now())
@@ -43,6 +43,11 @@ export const getAllActiveEventsQuery = async (city?: string, eventName?: string,
             location: true,
             Category: true,
             eventTicket: true
+        },
+        skip: (Number(page) - 1) * Number(6) || 0,
+        take: 6,
+        orderBy: {
+            date: "asc"
         }
     });
 };

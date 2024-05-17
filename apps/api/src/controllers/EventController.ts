@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import fs from "fs";
+import { prisma } from "@/connection";
 import { createEventQuery, updateEventQuery, publishEventQuery, getAllActiveEventsQuery, getEventByIdQuery, getAllCategoriesQuery, getAllPastEventsQuery, getAllClosestEventsQuery } from "@/services/EventService/EventService";
 
 // controller for get all events
@@ -8,11 +9,19 @@ export const getAllActiveEvents = async (req: Request, res: Response, next: Next
         const city = req.query.city as string | undefined;
         const eventName = req.query.eventName as string | undefined;
         const categoryId = req.query.categoryId as string | undefined;
-        const events = await getAllActiveEventsQuery(city, eventName, categoryId);
+        const page = req.query.page as any;
+        const events = await getAllActiveEventsQuery(city, eventName, categoryId, page);
         if (!events) throw new Error("Events are currently unavailable.")
+        const eventsCount = await prisma.event.count({
+            where: {
+                date: {
+                    gte: new Date(Date.now())
+                }
+            }
+        });
 
         res.status(200).send({
-            count: events.length,
+            count: eventsCount,
             error: false,
             message: "All events fetched successfully",
             data: events

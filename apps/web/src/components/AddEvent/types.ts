@@ -13,6 +13,7 @@ export interface IUpdateTicketModal {
     visible: boolean
     onClose: () => void
     ticketId: any
+    refetchEventDetails: any
 }
 
 export interface IUpdatePromotionModal {
@@ -28,6 +29,7 @@ export interface ICreatedTicketCard {
     price: string
     quantity: number
     validityDate: string
+    refetchEventDetails: any
 }
 
 export interface ICreatedPromotionCard {

@@ -3,18 +3,16 @@ import { useState } from "react";
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { useCreateTicket } from "@/hooks/events/useCreateTicket";
 import { ICreateTicketAndPromotionModal } from "./types";
-import { useGetEventDetails } from "@/hooks/events/useGetEventDetails";
 import { createTicketSchema } from "@/schema/CreateTicketSchema";
 
 export const CreateTicketModal = ({ visible, onClose, eventId }: ICreateTicketAndPromotionModal) => {
     const [isLoading, setIsLoading] = useState(false)
-    const { refetchEventDetails } = useGetEventDetails(eventId)
-    const { mutationCreateTicket } = useCreateTicket();
+
+    const { mutationCreateTicket } = useCreateTicket(eventId);
     if (!visible) return null;
 
     const handleOnClose = (e: any) => {
         if (e.target.id === "container") onClose();
-        refetchEventDetails()
     };
 
     return (

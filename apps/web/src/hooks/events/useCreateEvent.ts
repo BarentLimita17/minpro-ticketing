@@ -12,7 +12,6 @@ export const useCreateEvent = () => {
         }
     })
 
-    // console.log(mutationCreateEvent)
     return {
         mutationCreateEvent
     }

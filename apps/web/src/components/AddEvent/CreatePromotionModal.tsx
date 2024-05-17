@@ -3,18 +3,15 @@ import { useState } from "react";
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { useCreatePromotion } from "@/hooks/events/useCreatePromotion";
 import { ICreateTicketAndPromotionModal } from "./types";
-import { useGetEventDetails } from "@/hooks/events/useGetEventDetails";
 import { createPromotionSchema } from "@/schema/CreatePromotionSchema";
 
 export const CreatePromotionModal = ({ visible, onClose, eventId }: ICreateTicketAndPromotionModal) => {
     const [isLoading, setIsLoading] = useState(false)
-    const { refetchEventDetails } = useGetEventDetails(eventId)
-    const { mutationCreatePromotion } = useCreatePromotion();
+    const { mutationCreatePromotion } = useCreatePromotion(eventId as number);
     if (!visible) return null;
 
     const handleOnClose = (e: any) => {
         if (e.target.id === "container") onClose();
-        refetchEventDetails()
     };
 
     return (

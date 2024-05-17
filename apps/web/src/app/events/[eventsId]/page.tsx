@@ -7,10 +7,13 @@ import Image from "next/image";
 import Map from "@/components/Map";
 import TicketCard from "@/components/EventDetails/TicketCard";
 import { useCreateTransaction } from "@/hooks/transactions/useCreateTransaction";
+import { useGetReviewDetails } from "@/hooks/reviews/useGetReviewDetails";
+import ReviewCard from "@/components/Review/ReviewCard";
 
 export default function EventDetails({ params }: any) {
-    const { dataEventDetails, refetchEventDetails } = useGetEventDetails(params.eventsId)
-    const { mutationCreateTransaction } = useCreateTransaction()
+    const { dataEventDetails } = useGetEventDetails(params.eventsId)
+    const { reviewDetails } = useGetReviewDetails(params.eventsId)
+    const { mutationCreateTransaction } = useCreateTransaction(params.eventsId)
 
     const [ticketArray, setTicketArray] = useState([])
     const [promotionCode, setPromotionCode] = useState('');
@@ -33,6 +36,8 @@ export default function EventDetails({ params }: any) {
             eventTicketArray.push({ eventTicketId: ticketId, quantity: 1 });
         }
     })
+
+    const isEventDatePassed = (new Date(dataEventDetails?.date).getTime()) < Date.now();
 
     if (dataEventDetails === undefined) return (<div>Loading</div>);
 
@@ -106,40 +111,52 @@ export default function EventDetails({ params }: any) {
                         </div>
                     </div>
                     {/* DIV ENTER PROMOTION CODE */}
-                    <div className="card flex flex-none shadow-2xl text-center justify-center items-center gap-3 mb-3">
-                        <div className="text-[16px] mt-[12px] text-black font-bold">
-                            ENTER PROMOTION CODE
-                        </div>
-                        <input name="promotionCode" value={promotionCode} onChange={(e) => setPromotionCode(e.target.value)} className="flex bg-gray-200 mb-[16px] p-[6px] justify-center w-[90%] rounded-xl text-black font-bold italic" placeholder="Enter Code here" />
-                    </div>
-                    {/* DIV TIKET */}
-                    <div className="card flex flex-none shadow-2xl">
-                        <div className="card-body rounded-xl bg-white flex-none">
-                            <div className="flex justify-start text-black font-bold">
-                                Pilih Tiket
+                    {isEventDatePassed ? <>
+                        <div className="flex flex-none bg-base text-center justify-center items-center gap-3 mb-3">
+                            <div className="text-[26px] my-[12px] text-black font-bold items-center flex flex-wrap gap-3">
+                                <hr className=" border-black border-solid border-2 w-[150px] lg:w-[250px]" />
+                                Reviews
+                                <hr className=" border-black border-solid border-2 w-[150px] lg:w-[250px]" />
                             </div>
-                            <hr className="text-black" />
-                            {dataEventDetails?.eventTicket?.map((ticket: any) => (
-                                <TicketCard key={ticket.id} ticket={ticketArray} setTicket={setTicketArray} ticketId={ticket.id} name={ticket.name} description={ticket.description} price={ticket.price.toLocaleString("id-ID", { style: "currency", currency: "IDR" })} quantity={ticket.quantity} validityDate={ticket.validityDate} />
-                            ))}
                         </div>
-                    </div>
-                    <div className="flex justify-center items-center mt-[16px]">
-                        <button
-                            onClick={async () => {
-                                mutationCreateTransaction({
-                                    userUid: 'clw3rc2u700011163aislktlf',
-                                    eventId: params.eventsId,
-                                    eventTicket: eventTicketArray,
-                                    promotionCode: promotionCode
-                                })
-                                await refetchEventDetails()
-                            }}
-                            className="w-[90%] h-[40px] bg-[#007bff] text-white py-2 px-4 rounded-lg hover:bg-[#0056b3]"
-                            disabled={eventTicketArray.length === 0}>
-                            Buy Now
-                        </button>
-                    </div>
+                        {reviewDetails?.map((review: any) => (
+                            <ReviewCard key={review.id} reviewFeedback={review.feedback} reviewSuggestion={review.suggestion} rating={review.rating} reviewerFullname={review.User.fullname} reviewerEmail={review.User.email} />
+                        ))}
+                    </> : <>
+                        <div className="card flex flex-none shadow-2xl text-center justify-center items-center gap-3 mb-3">
+                            <div className="text-[16px] mt-[12px] text-black font-bold">
+                                ENTER PROMOTION CODE
+                            </div>
+                            <input name="promotionCode" value={promotionCode} onChange={(e) => setPromotionCode(e.target.value)} className="flex bg-gray-200 mb-[16px] p-[6px] justify-center w-[90%] rounded-xl text-black font-bold italic" placeholder="Enter Code here" />
+                        </div>
+                        {/* DIV TIKET */}
+                        <div className="card flex flex-none shadow-2xl">
+                            <div className="card-body rounded-xl bg-white flex-none">
+                                <div className="flex justify-start text-black font-bold">
+                                    Pilih Tiket
+                                </div>
+                                <hr className="text-black" />
+                                {dataEventDetails?.eventTicket?.map((ticket: any) => (
+                                    <TicketCard key={ticket.id} ticket={ticketArray} setTicket={setTicketArray} ticketId={ticket.id} name={ticket.name} description={ticket.description} price={ticket.price.toLocaleString("id-ID", { style: "currency", currency: "IDR" })} quantity={ticket.quantity} validityDate={ticket.validityDate} />
+                                ))}
+                            </div>
+                        </div>
+                        <div className="flex justify-center items-center mt-[16px]">
+                            <button
+                                onClick={async () => {
+                                    mutationCreateTransaction({
+                                        userUid: 'clw3rc2u700011163aislktlf',
+                                        eventId: params.eventsId,
+                                        eventTicket: eventTicketArray,
+                                        promotionCode: promotionCode
+                                    })
+                                }}
+                                className="w-[90%] h-[40px] bg-[#007bff] text-white py-2 px-4 rounded-lg hover:bg-[#0056b3]"
+                                disabled={eventTicketArray.length === 0}>
+                                Buy Now
+                            </button>
+                        </div>
+                    </>}
                 </div>
             </div>
         </div >

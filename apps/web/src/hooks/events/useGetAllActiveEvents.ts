@@ -1,9 +1,10 @@
 import { useGetAllActiveEventsQuery } from "@/api/useGetAllActiveEventsQuery";
 
-export const useGetAllActiveEvents = (city: string, eventName: string, categoryId: string) => {
-    const { allActiveEvents } = useGetAllActiveEventsQuery(city, eventName, categoryId);
+export const useGetAllActiveEvents = (city: string, eventName: string, categoryId: string, page: number) => {
+    const { allActiveEvents, refetchAllActiveEvents } = useGetAllActiveEventsQuery(city, eventName, categoryId, page);
 
     return {
-        dataAllActiveEvents: allActiveEvents?.data?.data
+        dataAllActiveEvents: allActiveEvents?.data,
+        refetchAllActiveEvents
     }
 }

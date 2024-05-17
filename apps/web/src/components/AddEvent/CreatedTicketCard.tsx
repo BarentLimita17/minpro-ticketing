@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { ICreatedTicketCard } from "./types";
 import { GrUpdate } from "react-icons/gr";
 import { FaRegTrashAlt } from "react-icons/fa";
 import { UpdateTicketModal } from "./UpdateTicketModal";
 import { useDeleteTicket } from "@/hooks/events/useDeleteTicket";
 
-export default function CreatedTicketCard({ name, description, price, quantity, validityDate, id }: ICreatedTicketCard) {
+export default function CreatedTicketCard({ name, description, price, quantity, validityDate, id, refetchEventDetails }: ICreatedTicketCard) {
     const validUntil = new Date(validityDate)
     const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
     let formattedDate = `${validUntil.getDate()} ${months[validUntil.getMonth()]} ${validUntil.getFullYear()}`
@@ -40,7 +40,7 @@ export default function CreatedTicketCard({ name, description, price, quantity, 
                     </div>
                 </div>
             </div>
-            <UpdateTicketModal ticketId={id} visible={showTicketModal} onClose={() => setShowTicketModal(false)} />
+            <UpdateTicketModal ticketId={id} refetchEventDetails={refetchEventDetails} visible={showTicketModal} onClose={() => setShowTicketModal(false)} />
             <div className="flex gap-3 mx-[10px]">
                 <button onClick={() => setShowTicketModal(true)} className="flex justify-center items-center w-[50%] h-[30px] text-black text-[10px] font-bold gap-3 border hover:bg-green-400 border-black rounded-lg p-[3px] bg-[#0e9f6e]">
                     Make Changes <GrUpdate />
